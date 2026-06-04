@@ -1,85 +1,1243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stationery Store</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="LaLa's Mart – Your one-stop stationery shop for school, college, art, and office supplies. Shop notebooks, pens, art supplies and more. Enjoy up to 50% off during our Back to School Sale!" />
+  <meta name="keywords" content="stationery, notebooks, pens, art supplies, office supplies, school kits, geometry box, LaLa's Mart" />
+  <meta name="author" content="LaLa's Mart" />
+  <meta property="og:title" content="LaLa's Mart – Everything You Need To Learn, Create & Succeed" />
+  <meta property="og:description" content="Shop premium stationery online. Best prices on notebooks, pens, art supplies and office essentials." />
+  <meta property="og:type" content="website" />
+  <title>LaLa's Mart | Everything You Need To Learn, Create &amp; Succeed</title>
 
-    <link rel="stylesheet" href="style.css">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <!-- Navbar -->
-    <nav>
-        <div class="logo">
-            Stationery Store
-        </div>
+<!-- ===== TOP BAR ===== -->
+<div id="top-bar" role="banner" aria-label="Promotional top bar">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <span class="top-bar-promo">
+        <i class="bi bi-lightning-charge-fill"></i>
+        Back to School Sale — Up to 50% OFF! Use code: <strong>SCHOOL50</strong>
+      </span>
+      <div class="d-flex gap-3">
+        <a href="#"><i class="bi bi-truck me-1"></i>Track Order</a>
+        <a href="#"><i class="bi bi-telephone me-1"></i>1800-XXX-XXXX</a>
+        <a href="#"><i class="bi bi-translate me-1"></i>EN</a>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Products</a></li>
-            <li><a href="#">Categories</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
+<!-- ===== MAIN NAVBAR ===== -->
+<header id="main-navbar" role="banner">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg p-0 navbar-inner" aria-label="Main navigation">
+      <!-- Logo -->
+      <a class="lm-logo me-4 flex-shrink-0" href="/" aria-label="LaLa's Mart – Home">
+        LaLa's<span>Mart</span>
+        <small>Everything You Need To Learn, Create &amp; Succeed</small>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-wrap mx-auto d-none d-lg-flex" role="search">
+        <select class="search-category" aria-label="Search category">
+          <option>All Categories</option>
+          <option>Notebooks</option>
+          <option>Pens &amp; Writing</option>
+          <option>Art Supplies</option>
+          <option>Office Supplies</option>
+          <option>School Kits</option>
+          <option>Files &amp; Folders</option>
+        </select>
+        <input type="search" class="search-input" placeholder="Search for notebooks, pens, art supplies…" aria-label="Search products" />
+        <button class="search-btn" type="submit" aria-label="Submit search"><i class="bi bi-search"></i></button>
+      </div>
+
+      <!-- Right Nav Actions -->
+      <div class="d-none d-lg-flex align-items-center gap-2 ms-3 flex-shrink-0">
+        <a href="#" class="nav-action-btn" aria-label="Login to your account"><i class="bi bi-person"></i> Login</a>
+        <a href="#" class="nav-action-btn register" aria-label="Create a new account"><i class="bi bi-person-plus"></i> Register</a>
+        <a href="#" class="icon-btn" aria-label="Wishlist (2 items)">
+          <i class="bi bi-heart"></i>
+          <span class="icon-badge">2</span>
+        </a>
+        <a href="#" class="icon-btn" aria-label="Shopping cart (3 items)">
+          <i class="bi bi-bag"></i>
+          <span class="icon-badge">3</span>
+        </a>
+      </div>
+
+      <!-- Mobile Toggle -->
+      <div class="d-flex align-items-center gap-2 d-lg-none ms-auto">
+        <a href="#" class="icon-btn" aria-label="Shopping cart"><i class="bi bi-bag"></i><span class="icon-badge">3</span></a>
+        <button class="navbar-toggler border-0 ps-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="bi bi-list" style="font-size:1.6rem;color:var(--lm-dark);"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div class="collapse navbar-collapse" id="mobileMenu">
+        <div class="py-3 w-100">
+          <div class="search-wrap d-flex mb-3">
+            <input type="search" class="search-input w-100" placeholder="Search products…" aria-label="Search products" />
+            <button class="search-btn" type="submit" aria-label="Submit search"><i class="bi bi-search"></i></button>
+          </div>
+          <ul class="navbar-nav gap-1">
+            <li class="nav-item"><a class="nav-link fw-600" href="#" style="font-weight:600;color:var(--lm-dark)">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Notebooks</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Pens &amp; Writing</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Art Supplies</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Office Supplies</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Deals</a></li>
+          </ul>
+          <div class="d-flex gap-2 mt-3">
+            <a href="#" class="nav-action-btn w-50 justify-content-center">Login</a>
+            <a href="#" class="nav-action-btn register w-50 justify-content-center">Register</a>
+          </div>
+        </div>
+      </div>
     </nav>
+  </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Welcome To Stationery Store</h1>
-        <p>Your One Stop Destination For School And Office Supplies</p>
+  <!-- Category Navigation -->
+  <nav id="category-nav" aria-label="Category navigation">
+    <div class="container">
+      <ul class="cat-nav-list">
+        <li><a href="#" aria-label="All categories"><i class="bi bi-grid-3x3-gap-fill"></i> All Categories</a></li>
+        <li><a href="#"><i class="bi bi-journal-text"></i> Notebooks</a></li>
+        <li><a href="#"><i class="bi bi-pen"></i> Pens &amp; Writing</a></li>
+        <li><a href="#"><i class="bi bi-palette"></i> Art Supplies</a></li>
+        <li><a href="#"><i class="bi bi-briefcase"></i> Office Supplies</a></li>
+        <li><a href="#"><i class="bi bi-backpack"></i> School Kits</a></li>
+        <li><a href="#"><i class="bi bi-compass"></i> Geometry Boxes</a></li>
+        <li><a href="#"><i class="bi bi-folder"></i> Files &amp; Folders</a></li>
+        <li><a href="#"><i class="bi bi-printer"></i> Printing Materials</a></li>
+        <li><a href="#"><i class="bi bi-gift"></i> Gift Sets</a></li>
+        <li><a href="#"><i class="bi bi-tags-fill"></i> Deals <span class="cat-nav-sale">HOT</span></a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
 
-        <button>Shop Now</button>
-    </section>
-
-    <!-- Categories -->
-    <section class="categories">
-
-        <h2>Categories</h2>
-
-        <div class="category-container">
-
-            <div class="card">Pens</div>
-
-            <div class="card">Notebooks</div>
-
-            <div class="card">Art Supplies</div>
-
-            <div class="card">Office Supplies</div>
-
+<!-- ===== HERO ===== -->
+<section id="hero-section" aria-labelledby="hero-heading">
+  <div class="container position-relative">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-6">
+        <div class="hero-badge">
+          <i class="bi bi-star-fill"></i> Back to School Sale 2024
         </div>
-
-    </section>
-
-    <!-- Featured Products -->
-    <section class="products">
-
-        <h2>Featured Products</h2>
-
-        <div class="product-container">
-
-            <div class="product-card">
-                <h3>Notebook</h3>
-                <p>₹100</p>
-            </div>
-
-            <div class="product-card">
-                <h3>Pen Set</h3>
-                <p>₹150</p>
-            </div>
-
-            <div class="product-card">
-                <h3>Geometry Box</h3>
-                <p>₹250</p>
-            </div>
-
+        <h1 id="hero-heading" class="hero-heading">
+          Everything You Need<br>To <span class="text-accent">Learn, Create</span><br>&amp; Succeed
+        </h1>
+        <p class="hero-sub">India's favourite stationery destination for students, teachers, artists &amp; offices. Premium quality, unbeatable prices.</p>
+        <div>
+          <span class="hero-offer-pill"><i class="bi bi-lightning-charge-fill me-1"></i> UP TO 50% OFF — Limited Time Only</span>
         </div>
+        <div class="d-flex gap-3 flex-wrap">
+          <a href="#" class="btn-lm-primary d-inline-flex align-items-center gap-2" aria-label="Shop the sale now">
+            <i class="bi bi-bag-heart-fill"></i> Shop the Sale
+          </a>
+          <a href="#" class="btn-lm-outline d-inline-flex align-items-center gap-2" style="color:#fff;border-color:rgba(255,255,255,0.35);" aria-label="Explore all categories">
+            Explore Categories <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-num">10K+</div>
+            <div class="hero-stat-label">Products</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">1.2L+</div>
+            <div class="hero-stat-label">Happy Customers</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">500+</div>
+            <div class="hero-stat-label">Brands</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">4.8★</div>
+            <div class="hero-stat-label">Avg. Rating</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-visual-card">
+          <div class="hero-product-img-placeholder" role="img" aria-label="Hero promotional image showing stationery products">
+            <i class="bi bi-image"></i>
+            <span>Hero Banner Image (1200×600)</span>
+            <span style="font-size:11px;opacity:0.6">Back to School — Stationery Collection</span>
+          </div>
+          <div class="d-flex flex-wrap justify-content-center gap-1">
+            <span class="hero-tag"><i class="bi bi-check-circle-fill" style="color:#4ade80;font-size:12px;"></i> Free Delivery ₹499+</span>
+            <span class="hero-tag"><i class="bi bi-shield-check-fill" style="color:#60a5fa;font-size:12px;"></i> Secure Payments</span>
+            <span class="hero-tag"><i class="bi bi-arrow-repeat" style="color:#f59e0b;font-size:12px;"></i> Easy Returns</span>
+            <span class="hero-tag"><i class="bi bi-award-fill" style="color:#a78bfa;font-size:12px;"></i> Genuine Products</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    </section>
+<!-- ===== TRUST BAR ===== -->
+<section id="trust-bar" aria-label="Trust indicators">
+  <div class="container">
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <div class="trust-item">
+          <i class="bi bi-truck" aria-hidden="true"></i>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Free Delivery</div>
+            <div style="font-size:11px;color:var(--lm-muted);">On orders above ₹499</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="trust-item">
+          <i class="bi bi-shield-check" aria-hidden="true"></i>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Secure Payments</div>
+            <div style="font-size:11px;color:var(--lm-muted);">100% Safe &amp; Encrypted</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="trust-item">
+          <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Easy Returns</div>
+            <div style="font-size:11px;color:var(--lm-muted);">7-day hassle-free returns</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="trust-item">
+          <i class="bi bi-headset" aria-hidden="true"></i>
+          <div>
+            <div style="font-weight:600;font-size:13px;">24/7 Support</div>
+            <div style="font-size:11px;color:var(--lm-muted);">We're always here to help</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2026 Stationery Store. All Rights Reserved.</p>
-    </footer>
+<!-- ===== FEATURED CATEGORIES ===== -->
+<section id="featured-categories" class="section-pad" aria-labelledby="categories-heading">
+  <div class="container">
+    <div class="section-header d-flex justify-content-between align-items-end">
+      <div>
+        <span class="section-label">Browse</span>
+        <h2 id="categories-heading" class="section-heading mt-1">Shop by Category</h2>
+        <span class="divider-accent mt-2 d-block"></span>
+      </div>
+      <a href="#" class="view-all-link d-none d-md-flex">View All <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="row g-3">
+      <!-- Notebooks -->
+      <div class="col-6 col-md-3 col-lg-3">
+        <a href="#" class="category-card" aria-label="Shop Notebooks">
+          <div class="cat-icon-wrap" style="background:#EEF2FF;color:#4F46E5;">
+            <i class="bi bi-journal-text" aria-hidden="true"></i>
+          </div>
+          <div class="cat-name">Notebooks &amp; Diaries</div>
+          <div class="cat-count">580+ Products</div>
+        </a>
+      </div>
+      <!-- Pens -->
+      <div class="col-6 col-md-3 col-lg-3">
+        <a href="#" class="category-card" aria-label="Shop Pens and Writing instruments">
+          <div class="cat-icon-wrap" style="background:#FFF7ED;color:#EA580C;">
+            <i class="bi bi-pen-fill" aria-hidden="true"></i>
+          </div>
+          <div class="cat-name">Pens &amp; Writing</div>
+          <div class="cat-count">940+ Products</div>
+        </a>
+      </div>
+      <!-- Art Supplies -->
+      <div class="col-6 col-md-3 col-lg-3">
+        <a href="#" class="category-card" aria-label="Shop Art Supplies">
+          <div class="cat-icon-wrap" style="background:#FDF2F8;color:#C026D3;">
+            <i class="bi bi-palette-fill" aria-hidden="true"></i>
+          </div>
+          <div class="cat-name">Art Supplies</div>
+          <div class="cat-count">720+ Products</div>
+        </a>
+      </div>
+      <!-- Office -->
+      <div class="col-6 col-md-3 col-lg-3">
+        <a href="#" class="category-card" aria-label="Shop Office Supplies">
+          <div class="cat-icon-wrap" style="background:#F0FDF4;color:#16A34A;">
+            <i class="bi bi-briefcase-fill" aria-hidden="true"></i>
+          </div>
+          <div class="cat-name">Office Supplies</div>
+          <div class="cat-count">430+ Products</div>
+        </a>
+      </div>
+      <!-- School Kits -->
+      <div class="col-6 col-md-3 col-lg-3">
+        <a href="#" class="category-card" aria-label="Shop School Kits">
+          <div class="cat-icon-wrap" style="background:#FFF1F2;color:#E11D48;">
+            <i class="bi bi-backpack-fill" aria-hidden="true"></i>
+          </div>
+          <div class="cat-name">School Kits</div>
+          <div class="cat-count">120+ Products</div>
+        </a>
+      </div>
+      <!-- Geometry Boxes -->
+      <div class="col-6 col-md-3 col-lg-3">
+        <a href="#" class="category-card" aria-label="Shop Geometry Boxes">
+          <div class="cat-icon-wrap" style="background:#FFFBEB;color:#D97706;">
+            <i class="bi bi-compass" aria-hidden="true"></i>
+          </div>
+          <div class="cat-name">Geometry Boxes</div>
+          <div class="cat-count">85+ Products</div>
+        </a>
+      </div>
+      <!-- Files & Folders -->
+      <div class="col-6 col-md-3 col-lg-3">
+        <a href="#" class="category-card" aria-label="Shop Files and Folders">
+          <div class="cat-icon-wrap" style="background:#EFF6FF;color:#2563EB;">
+            <i class="bi bi-folder-fill" aria-hidden="true"></i>
+          </div>
+          <div class="cat-name">Files &amp; Folders</div>
+          <div class="cat-count">210+ Products</div>
+        </a>
+      </div>
+      <!-- Printing -->
+      <div class="col-6 col-md-3 col-lg-3">
+        <a href="#" class="category-card" aria-label="Shop Printing Materials">
+          <div class="cat-icon-wrap" style="background:#F0FDFA;color:#0D9488;">
+            <i class="bi bi-printer-fill" aria-hidden="true"></i>
+          </div>
+          <div class="cat-name">Printing Materials</div>
+          <div class="cat-count">160+ Products</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROMO BANNERS ===== -->
+<section id="promo-banners" class="section-pad" style="padding-top:0;" aria-label="Promotional offers">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="promo-banner promo-banner-1">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">Student Essentials</div>
+          <div class="promo-banner-title">Back to School<br>Starter Pack</div>
+          <div class="promo-banner-sub">Notebooks, Pens &amp; Geometry Box — All in One!</div>
+          <div class="d-flex align-items-center gap-3">
+            <span class="promo-banner-price">Starting ₹199</span>
+            <a href="#" class="btn-lm-primary" style="padding:8px 18px;font-size:13px;">Shop Now</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="promo-banner promo-banner-2">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">Creative Studio</div>
+          <div class="promo-banner-title">Artist Grade<br>Supplies Sale</div>
+          <div class="promo-banner-sub">Watercolours, Sketching Kits &amp; Canvas Sets</div>
+          <div class="d-flex align-items-center gap-3">
+            <span class="promo-banner-price">Up to 40% OFF</span>
+            <a href="#" class="btn-lm-primary" style="padding:8px 18px;font-size:13px;">Explore</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FLASH SALE ===== -->
+<section id="flash-sale" class="section-pad" aria-labelledby="flash-heading">
+  <div class="container">
+    <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+      <div>
+        <h2 id="flash-heading" class="flash-heading"><i class="bi bi-lightning-charge-fill fire me-2"></i>Flash Sale</h2>
+        <p style="color:rgba(255,255,255,0.55);font-size:14px;margin-top:4px;">Deals so good they won't last. Limited stock!</p>
+      </div>
+      <div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:8px;text-align:center;">Ends in:</div>
+        <div class="d-flex align-items-center gap-2" role="timer" aria-label="Flash sale countdown timer">
+          <div class="timer-block"><div class="timer-num">05</div><div class="timer-label">Hrs</div></div>
+          <span class="timer-sep">:</span>
+          <div class="timer-block"><div class="timer-num">42</div><div class="timer-label">Min</div></div>
+          <span class="timer-sep">:</span>
+          <div class="timer-block"><div class="timer-num">18</div><div class="timer-label">Sec</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-3">
+      <!-- Flash Product 1 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="product-card" aria-label="Reynolds Trimax Pens">
+          <div class="product-img-wrap">
+            <span class="badge-discount" aria-label="45 percent off">−45%</span>
+            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
+            <div class="product-img-placeholder" role="img" aria-label="Reynolds Trimax Pens product image">
+              <i class="bi bi-pen-fill"></i>
+              <span>Product Image</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-brand">Reynolds</div>
+            <h3 class="product-name">Reynolds Trimax Ballpoint Pens Pack of 10</h3>
+            <div class="product-rating">
+              <span class="stars" aria-label="4.5 stars">★★★★½</span>
+              <span class="rating-count">(2,841)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-current">₹149</span>
+              <span class="price-original">₹270</span>
+              <span class="price-save">Save ₹121</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" aria-label="Add Reynolds Trimax Pens to cart"><i class="bi bi-bag-plus"></i> Add</button>
+              <button class="btn-buy-now" aria-label="Buy Reynolds Trimax Pens now">Buy Now</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <!-- Flash Product 2 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="product-card" aria-label="Classmate 6-Subject Notebook">
+          <div class="product-img-wrap">
+            <span class="badge-discount" aria-label="38 percent off">−38%</span>
+            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
+            <div class="product-img-placeholder" role="img" aria-label="Classmate 6-Subject Notebook product image">
+              <i class="bi bi-journal-text"></i>
+              <span>Product Image</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-brand">Classmate</div>
+            <h3 class="product-name">Classmate 6-Subject Spiral Notebook A4 300 Pages</h3>
+            <div class="product-rating">
+              <span class="stars" aria-label="4 stars">★★★★☆</span>
+              <span class="rating-count">(1,204)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-current">₹199</span>
+              <span class="price-original">₹320</span>
+              <span class="price-save">Save ₹121</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" aria-label="Add Classmate Notebook to cart"><i class="bi bi-bag-plus"></i> Add</button>
+              <button class="btn-buy-now" aria-label="Buy Classmate Notebook now">Buy Now</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <!-- Flash Product 3 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="product-card" aria-label="Faber-Castell Watercolour Set">
+          <div class="product-img-wrap">
+            <span class="badge-discount" aria-label="50 percent off">−50%</span>
+            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
+            <div class="product-img-placeholder" role="img" aria-label="Faber-Castell Watercolour Set product image">
+              <i class="bi bi-palette-fill"></i>
+              <span>Product Image</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-brand">Faber-Castell</div>
+            <h3 class="product-name">Faber-Castell 24 Shade Watercolour Set with Brush</h3>
+            <div class="product-rating">
+              <span class="stars" aria-label="5 stars">★★★★★</span>
+              <span class="rating-count">(876)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-current">₹449</span>
+              <span class="price-original">₹899</span>
+              <span class="price-save">Save ₹450</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" aria-label="Add Faber-Castell Watercolour to cart"><i class="bi bi-bag-plus"></i> Add</button>
+              <button class="btn-buy-now" aria-label="Buy Faber-Castell Watercolour now">Buy Now</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <!-- Flash Product 4 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="product-card" aria-label="Camlin Geometry Box">
+          <div class="product-img-wrap">
+            <span class="badge-discount" aria-label="30 percent off">−30%</span>
+            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
+            <div class="product-img-placeholder" role="img" aria-label="Camlin Geometry Box product image">
+              <i class="bi bi-compass"></i>
+              <span>Product Image</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-brand">Camlin</div>
+            <h3 class="product-name">Camlin Scholar Premium Geometry Box 12-Piece Set</h3>
+            <div class="product-rating">
+              <span class="stars" aria-label="4.5 stars">★★★★½</span>
+              <span class="rating-count">(3,122)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-current">₹189</span>
+              <span class="price-original">₹270</span>
+              <span class="price-save">Save ₹81</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" aria-label="Add Camlin Geometry Box to cart"><i class="bi bi-bag-plus"></i> Add</button>
+              <button class="btn-buy-now" aria-label="Buy Camlin Geometry Box now">Buy Now</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <a href="#" class="btn-lm-outline" style="color:#fff;border-color:rgba(255,255,255,0.3);" aria-label="View all flash sale products">View All Flash Deals <i class="bi bi-arrow-right ms-1"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BEST SELLERS ===== -->
+<section id="best-sellers" class="section-pad" aria-labelledby="bestsellers-heading">
+  <div class="container">
+    <div class="section-header d-flex justify-content-between align-items-end">
+      <div>
+        <span class="section-label">Top Picks</span>
+        <h2 id="bestsellers-heading" class="section-heading mt-1">Best Sellers</h2>
+        <span class="divider-accent mt-2 d-block"></span>
+      </div>
+      <a href="#" class="view-all-link d-none d-md-flex">View All <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="row g-3">
+      <!-- BS Product 1 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="product-card" aria-label="Pilot V7 Hi-Tecpoint Pen">
+          <div class="product-img-wrap">
+            <span class="badge-hot">BESTSELLER</span>
+            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
+            <div class="product-img-placeholder" role="img" aria-label="Pilot V7 Pen product image">
+              <i class="bi bi-pen"></i>
+              <span>Product Image</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-brand">Pilot</div>
+            <h3 class="product-name">Pilot V7 Hi-Tecpoint Liquid Ink Roller Ball Pen Blue</h3>
+            <div class="product-rating">
+              <span class="stars" aria-label="5 stars">★★★★★</span>
+              <span class="rating-count">(8,941)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-current">₹69</span>
+              <span class="price-original">₹95</span>
+              <span class="price-save">Save ₹26</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" aria-label="Add Pilot V7 to cart"><i class="bi bi-bag-plus"></i> Add</button>
+              <button class="btn-buy-now" aria-label="Buy Pilot V7 now">Buy Now</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <!-- BS Product 2 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="product-card" aria-label="Navneet A4 Notebook Pack">
+          <div class="product-img-wrap">
+            <span class="badge-hot">BESTSELLER</span>
+            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
+            <div class="product-img-placeholder" role="img" aria-label="Navneet Notebook product image">
+              <i class="bi bi-book-fill"></i>
+              <span>Product Image</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-brand">Navneet</div>
+            <h3 class="product-name">Navneet Youva A4 Soft Cover Notebook 240 Pages (Pack of 6)</h3>
+            <div class="product-rating">
+              <span class="stars" aria-label="4.5 stars">★★★★½</span>
+              <span class="rating-count">(4,230)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-current">₹349</span>
+              <span class="price-original">₹480</span>
+              <span class="price-save">Save ₹131</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" aria-label="Add Navneet Notebook Pack to cart"><i class="bi bi-bag-plus"></i> Add</button>
+              <button class="btn-buy-now" aria-label="Buy Navneet Notebook Pack now">Buy Now</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <!-- BS Product 3 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="product-card" aria-label="Staedtler Mars Plastic Eraser">
+          <div class="product-img-wrap">
+            <span class="badge-hot">BESTSELLER</span>
+            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
+            <div class="product-img-placeholder" role="img" aria-label="Staedtler Eraser product image">
+              <i class="bi bi-eraser-fill"></i>
+              <span>Product Image</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-brand">Staedtler</div>
+            <h3 class="product-name">Staedtler Mars Plastic Premium Eraser Pack of 3</h3>
+            <div class="product-rating">
+              <span class="stars" aria-label="5 stars">★★★★★</span>
+              <span class="rating-count">(6,710)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-current">₹89</span>
+              <span class="price-original">₹120</span>
+              <span class="price-save">Save ₹31</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" aria-label="Add Staedtler Eraser to cart"><i class="bi bi-bag-plus"></i> Add</button>
+              <button class="btn-buy-now" aria-label="Buy Staedtler Eraser now">Buy Now</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <!-- BS Product 4 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="product-card" aria-label="Luxor Ink Marker Set">
+          <div class="product-img-wrap">
+            <span class="badge-discount" aria-label="25 percent off">−25%</span>
+            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
+            <div class="product-img-placeholder" role="img" aria-label="Luxor Marker product image">
+              <i class="bi bi-highlighter"></i>
+              <span>Product Image</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-brand">Luxor</div>
+            <h3 class="product-name">Luxor Ink Sketch Marker Set 24 Colours with Carry Case</h3>
+            <div class="product-rating">
+              <span class="stars" aria-label="4 stars">★★★★☆</span>
+              <span class="rating-count">(1,984)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-current">₹599</span>
+              <span class="price-original">₹799</span>
+              <span class="price-save">Save ₹200</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" aria-label="Add Luxor Markers to cart"><i class="bi bi-bag-plus"></i> Add</button>
+              <button class="btn-buy-now" aria-label="Buy Luxor Markers now">Buy Now</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEW ARRIVALS ===== -->
+<section id="new-arrivals" class="section-pad" aria-labelledby="new-arrivals-heading">
+  <div class="container">
+    <div class="section-header d-flex justify-content-between align-items-end">
+      <div>
+        <span class="section-label">Fresh In</span>
+        <h2 id="new-arrivals-heading" class="section-heading mt-1">New Arrivals</h2>
+        <span class="divider-accent mt-2 d-block"></span>
+      </div>
+      <a href="#" class="view-all-link d-none d-md-flex">View All <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="row g-3">
+      <!-- NA Product 1 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="product-card" aria-label="Paperblanks Leather Journal">
+          <div class="product-img-wrap">
+            <span class="badge-new">NEW</span>
+            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
+            <div class="product-img-placeholder" role="img" aria-label="Paperblanks Leather Journal product image">
+              <i class="bi bi-journal-bookmark-fill"></i>
+              <span>Product Image</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-brand">Paperblanks</div>
+            <h3 class="product-name">Paperblanks Embossed Leather Hardcover Journal A5 240 Pages</h3>
+            <div class="product-rating">
+              <span class="stars" aria-label="5 stars">★★★★★</span>
+              <span class="rating-count">(142)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-current">₹899</span>
+              <span class="price-save ms-0" style="background:#EFF6FF;padding:2px 7px;border-radius:4px;color:#1D4ED8;font-size:11px;">Just Launched</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" aria-label="Add Paperblanks Journal to cart"><i class="bi bi-bag-plus"></i> Add</button>
+              <button class="btn-buy-now" aria-label="Buy Paperblanks Journal now">Buy Now</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <!-- NA Product 2 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="product-card" aria-label="Doms Neon Highlighters">
+          <div class="product-img-wrap">
+            <span class="badge-new">NEW</span>
+            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
+            <div class="product-img-placeholder" role="img" aria-label="Doms Neon Highlighter product image">
+              <i class="bi bi-highlighter"></i>
+              <span>Product Image</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-brand">Doms</div>
+            <h3 class="product-name">Doms Neon Pastel Dual-Tip Highlighter Set of 10 Colours</h3>
+            <div class="product-rating">
+              <span class="stars" aria-label="4.5 stars">★★★★½</span>
+              <span class="rating-count">(89)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-current">₹279</span>
+              <span class="price-original">₹350</span>
+              <span class="price-save">Save ₹71</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" aria-label="Add Doms Highlighters to cart"><i class="bi bi-bag-plus"></i> Add</button>
+              <button class="btn-buy-now" aria-label="Buy Doms Highlighters now">Buy Now</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <!-- NA Product 3 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="product-card" aria-label="Kokuyo Campus Planner">
+          <div class="product-img-wrap">
+            <span class="badge-new">NEW</span>
+            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
+            <div class="product-img-placeholder" role="img" aria-label="Kokuyo Campus Planner product image">
+              <i class="bi bi-calendar2-check-fill"></i>
+              <span>Product Image</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-brand">Kokuyo</div>
+            <h3 class="product-name">Kokuyo Campus Academic Daily Planner 2025 A5 – 365 Pages</h3>
+            <div class="product-rating">
+              <span class="stars" aria-label="4.5 stars">★★★★½</span>
+              <span class="rating-count">(57)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-current">₹649</span>
+              <span class="price-save ms-0" style="background:#EFF6FF;padding:2px 7px;border-radius:4px;color:#1D4ED8;font-size:11px;">Just Launched</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" aria-label="Add Kokuyo Planner to cart"><i class="bi bi-bag-plus"></i> Add</button>
+              <button class="btn-buy-now" aria-label="Buy Kokuyo Planner now">Buy Now</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <!-- NA Product 4 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="product-card" aria-label="Maped Compact Geometry Box">
+          <div class="product-img-wrap">
+            <span class="badge-new">NEW</span>
+            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
+            <div class="product-img-placeholder" role="img" aria-label="Maped Geometry Box product image">
+              <i class="bi bi-tools"></i>
+              <span>Product Image</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <div class="product-brand">Maped</div>
+            <h3 class="product-name">Maped Compact Study Geometry Box 14-Piece Metal Set</h3>
+            <div class="product-rating">
+              <span class="stars" aria-label="4 stars">★★★★☆</span>
+              <span class="rating-count">(34)</span>
+            </div>
+            <div class="product-price">
+              <span class="price-current">₹349</span>
+              <span class="price-original">₹420</span>
+              <span class="price-save">Save ₹71</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" aria-label="Add Maped Geometry Box to cart"><i class="bi bi-bag-plus"></i> Add</button>
+              <button class="btn-buy-now" aria-label="Buy Maped Geometry Box now">Buy Now</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURED BRANDS ===== -->
+<section id="featured-brands" aria-labelledby="brands-heading">
+  <div class="container">
+    <div class="section-header text-center mb-4">
+      <span class="section-label">Trusted Names</span>
+      <h2 id="brands-heading" class="section-heading mt-1">Featured Brands</h2>
+      <p class="text-muted-lm mt-2" style="font-size:14px;">Shop from 500+ globally trusted stationery brands</p>
+    </div>
+    <div class="row g-3 align-items-center">
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="#" class="brand-logo-card" aria-label="Shop Reynolds products">
+          <span class="brand-logo-text">Reynolds</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="#" class="brand-logo-card" aria-label="Shop Faber-Castell products">
+          <span class="brand-logo-text">Faber-Castell</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="#" class="brand-logo-card" aria-label="Shop Classmate products">
+          <span class="brand-logo-text">Classmate</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="#" class="brand-logo-card" aria-label="Shop Doms products">
+          <span class="brand-logo-text">DOMS</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="#" class="brand-logo-card" aria-label="Shop Staedtler products">
+          <span class="brand-logo-text">Staedtler</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="#" class="brand-logo-card" aria-label="Shop Pilot products">
+          <span class="brand-logo-text">Pilot</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="#" class="brand-logo-card" aria-label="Shop Camlin products">
+          <span class="brand-logo-text">Camlin</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="#" class="brand-logo-card" aria-label="Shop Navneet products">
+          <span class="brand-logo-text">Navneet</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="#" class="brand-logo-card" aria-label="Shop Luxor products">
+          <span class="brand-logo-text">Luxor</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="#" class="brand-logo-card" aria-label="Shop Maped products">
+          <span class="brand-logo-text">Maped</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="#" class="brand-logo-card" aria-label="Shop Kokuyo products">
+          <span class="brand-logo-text">Kokuyo</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="#" class="brand-logo-card" aria-label="Shop Stabilo products">
+          <span class="brand-logo-text">Stabilo</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY CHOOSE US ===== -->
+<section id="why-us" class="section-pad" aria-labelledby="why-heading">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <span class="section-label" style="color:rgba(255,255,255,0.5);">Our Promise</span>
+      <h2 id="why-heading" class="section-heading mt-1" style="color:#fff;">Why Choose LaLa's Mart?</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:14px;margin-top:8px;">Built around what students, teachers, and creators actually need</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-6 col-md-3">
+        <div class="why-card">
+          <div class="why-icon-wrap">
+            <i class="bi bi-truck" aria-hidden="true"></i>
+          </div>
+          <div class="why-title">Fast Delivery</div>
+          <div class="why-desc">Same-day dispatch for orders placed before 2 PM. Free delivery on orders above ₹499 across India.</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="why-card">
+          <div class="why-icon-wrap">
+            <i class="bi bi-award" aria-hidden="true"></i>
+          </div>
+          <div class="why-title">Quality Products</div>
+          <div class="why-desc">Every product is sourced from authorised dealers. 100% genuine items with manufacturer warranty.</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="why-card">
+          <div class="why-icon-wrap">
+            <i class="bi bi-shield-lock" aria-hidden="true"></i>
+          </div>
+          <div class="why-title">Secure Payments</div>
+          <div class="why-desc">PCI-DSS compliant checkout with UPI, cards, net banking, wallets, EMI, and COD options.</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="why-card">
+          <div class="why-icon-wrap">
+            <i class="bi bi-tags" aria-hidden="true"></i>
+          </div>
+          <div class="why-title">Affordable Pricing</div>
+          <div class="why-desc">Lowest prices guaranteed. Regular flash sales, student discounts, and loyalty rewards on every order.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section id="testimonials" class="section-pad" aria-labelledby="testimonials-heading">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <span class="section-label">Happy Customers</span>
+      <h2 id="testimonials-heading" class="section-heading mt-1">What Our Customers Say</h2>
+      <p class="text-muted-lm mt-2" style="font-size:14px;">Trusted by 1.2 lakh+ students, teachers &amp; professionals across India</p>
+    </div>
+    <div class="row g-4">
+      <!-- Testimonial 1 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="testimonial-card">
+          <p class="testimonial-text">I've been ordering stationery for my entire class from LaLa's Mart for two years. The quality is exceptional and delivery is always on time. My students love the Faber-Castell art sets!</p>
+          <div class="d-flex align-items-center gap-12px" style="gap:12px;">
+            <div class="reviewer-avatar">SR</div>
+            <div>
+              <div class="reviewer-name">Sunita Rao</div>
+              <div class="reviewer-role">Class 8 Art Teacher, Hyderabad</div>
+              <div class="stars mt-1" aria-label="5 star review" style="font-size:12px;">★★★★★</div>
+            </div>
+            <div class="ms-auto">
+              <span class="verified-badge"><i class="bi bi-patch-check-fill"></i> Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Testimonial 2 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="testimonial-card">
+          <p class="testimonial-text">As a college student on a tight budget, LaLa's Mart is my go-to. The flash sales are incredible — I stocked up on notebooks and pens for the whole semester for under ₹500!</p>
+          <div class="d-flex align-items-center" style="gap:12px;">
+            <div class="reviewer-avatar" style="background:#EFF6FF;color:#1D4ED8;">AK</div>
+            <div>
+              <div class="reviewer-name">Arjun Khanna</div>
+              <div class="reviewer-role">Engineering Student, Pune</div>
+              <div class="stars mt-1" aria-label="5 star review" style="font-size:12px;">★★★★★</div>
+            </div>
+            <div class="ms-auto">
+              <span class="verified-badge"><i class="bi bi-patch-check-fill"></i> Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Testimonial 3 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="testimonial-card">
+          <p class="testimonial-text">I order office supplies for our 40-person team monthly. LaLa's Mart gives us bulk discounts, reliable delivery, and a dedicated account manager. Couldn't ask for more.</p>
+          <div class="d-flex align-items-center" style="gap:12px;">
+            <div class="reviewer-avatar" style="background:#F0FDF4;color:#16A34A;">PM</div>
+            <div>
+              <div class="reviewer-name">Priya Menon</div>
+              <div class="reviewer-role">Office Manager, Bengaluru</div>
+              <div class="stars mt-1" aria-label="5 star review" style="font-size:12px;">★★★★★</div>
+            </div>
+            <div class="ms-auto">
+              <span class="verified-badge"><i class="bi bi-patch-check-fill"></i> Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Testimonial 4 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="testimonial-card">
+          <p class="testimonial-text">My daughter's school kit arrived the next day, beautifully packaged. The Camlin geometry box and Classmate notebooks were exactly as shown. She loves her new stationery!</p>
+          <div class="d-flex align-items-center" style="gap:12px;">
+            <div class="reviewer-avatar" style="background:#FFF1F2;color:#E11D48;">NJ</div>
+            <div>
+              <div class="reviewer-name">Nandita Joshi</div>
+              <div class="reviewer-role">Parent, Mumbai</div>
+              <div class="stars mt-1" aria-label="4 star review" style="font-size:12px;">★★★★☆</div>
+            </div>
+            <div class="ms-auto">
+              <span class="verified-badge"><i class="bi bi-patch-check-fill"></i> Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Testimonial 5 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="testimonial-card">
+          <p class="testimonial-text">The returns process is genuinely hassle-free. I had a defective pen in a pack and they replaced the entire set within 3 days. Amazing customer service, will keep coming back.</p>
+          <div class="d-flex align-items-center" style="gap:12px;">
+            <div class="reviewer-avatar" style="background:#FFFBEB;color:#D97706;">RV</div>
+            <div>
+              <div class="reviewer-name">Rahul Verma</div>
+              <div class="reviewer-role">Freelance Illustrator, Delhi</div>
+              <div class="stars mt-1" aria-label="5 star review" style="font-size:12px;">★★★★★</div>
+            </div>
+            <div class="ms-auto">
+              <span class="verified-badge"><i class="bi bi-patch-check-fill"></i> Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Testimonial 6 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="testimonial-card">
+          <p class="testimonial-text">I was sceptical about buying art supplies online but LaLa's Mart has won me over completely. The Faber-Castell watercolour set was sealed, genuine, and arrived in perfect condition.</p>
+          <div class="d-flex align-items-center" style="gap:12px;">
+            <div class="reviewer-avatar" style="background:#EEF2FF;color:#4F46E5;">DS</div>
+            <div>
+              <div class="reviewer-name">Divya Sharma</div>
+              <div class="reviewer-role">Fine Arts Student, Chennai</div>
+              <div class="stars mt-1" aria-label="5 star review" style="font-size:12px;">★★★★★</div>
+            </div>
+            <div class="ms-auto">
+              <span class="verified-badge"><i class="bi bi-patch-check-fill"></i> Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEWSLETTER ===== -->
+<section id="newsletter" aria-labelledby="newsletter-heading">
+  <div class="container position-relative">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-7">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:10px;">Stay in the Loop</div>
+        <h2 id="newsletter-heading" class="section-heading" style="color:#fff;">Get Exclusive Deals &amp;<br>Early Access to Sales</h2>
+        <p style="color:rgba(255,255,255,0.75);margin:14px 0 28px;font-size:15px;">Join 80,000+ subscribers and never miss a flash sale, new arrival, or exclusive coupon.</p>
+        <form class="d-flex gap-0 max-w-sm mx-auto" aria-label="Newsletter signup form" style="max-width:480px;margin:0 auto;">
+          <label for="newsletter-email" class="visually-hidden">Email address</label>
+          <input type="email" id="newsletter-email" class="newsletter-input" placeholder="Enter your email address" required aria-required="true" />
+          <button type="submit" class="newsletter-btn">Subscribe Free</button>
+        </form>
+        <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:14px;"><i class="bi bi-lock-fill me-1"></i>No spam, ever. Unsubscribe anytime. We respect your privacy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section id="faq-section" class="section-pad" aria-labelledby="faq-heading">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="section-header text-center mb-5">
+          <span class="section-label">Got Questions?</span>
+          <h2 id="faq-heading" class="section-heading mt-1">Frequently Asked Questions</h2>
+        </div>
+        <div class="accordion faq-accordion" id="faqAccordion">
+          <div class="accordion-item">
+            <h3 class="accordion-header" id="faq1-heading">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                What is the minimum order value for free delivery?
+              </button>
+            </h3>
+            <div id="faq1" class="accordion-collapse collapse show" aria-labelledby="faq1-heading" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">Free delivery is available on all orders above ₹499 across India. For orders below ₹499, a flat shipping fee of ₹49 is applicable. Express and same-day delivery options are also available at checkout for selected pin codes.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header" id="faq2-heading">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                How long does delivery take?
+              </button>
+            </h3>
+            <div id="faq2" class="accordion-collapse collapse" aria-labelledby="faq2-heading" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">Standard delivery takes 3–5 business days across India. Metro cities (Mumbai, Delhi, Bengaluru, Hyderabad, Chennai, Pune) receive delivery within 1–2 business days. Same-day delivery is available in select areas for orders placed before 12 PM.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header" id="faq3-heading">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                What is the return and refund policy?
+              </button>
+            </h3>
+            <div id="faq3" class="accordion-collapse collapse" aria-labelledby="faq3-heading" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">We offer a 7-day hassle-free return policy. If you receive a damaged, defective, or incorrect product, simply raise a return request from your account within 7 days. Refunds are processed within 5–7 business days to your original payment method.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header" id="faq4-heading">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                Are all products 100% genuine?
+              </button>
+            </h3>
+            <div id="faq4" class="accordion-collapse collapse" aria-labelledby="faq4-heading" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">Yes, absolutely. LaLa's Mart is an authorised reseller for all brands listed on our platform. We source directly from brand distributors and authorised dealers, ensuring every product is 100% genuine with original manufacturer packaging and warranty.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header" id="faq5-heading">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
+                Do you offer bulk or institutional discounts?
+              </button>
+            </h3>
+            <div id="faq5" class="accordion-collapse collapse" aria-labelledby="faq5-heading" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">Yes! We offer special pricing for schools, colleges, coaching institutes, and corporate offices. Orders above ₹5,000 qualify for tiered bulk discounts of up to 20%. Contact our B2B team at b2b@lalasmart.in or call 1800-XXX-XXXX for a customised quote.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header" id="faq6-heading">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" aria-expanded="false" aria-controls="faq6">
+                What payment methods do you accept?
+              </button>
+            </h3>
+            <div id="faq6" class="accordion-collapse collapse" aria-labelledby="faq6-heading" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">We accept all major payment methods including UPI (GPay, PhonePe, Paytm), debit cards, credit cards (Visa, Mastercard, Rupay, Amex), net banking, popular digital wallets, EMI (No Cost EMI available on orders above ₹3,000), and Cash on Delivery (COD) for eligible pin codes.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="main-footer" role="contentinfo">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Company Info -->
+      <div class="col-lg-4 col-md-6">
+        <a href="/" class="footer-logo" aria-label="LaLa's Mart – Home">LaLa's<span>Mart</span></a>
+        <p class="footer-about">Your one-stop stationery destination for students, teachers, artists, and offices. Quality products, unbeatable prices, and fast delivery across India since 2018.</p>
+        <div class="footer-social" aria-label="Social media links">
+          <a href="#" class="social-link" aria-label="Follow us on Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="Follow us on Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="Follow us on Twitter / X"><i class="bi bi-twitter-x" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="Follow us on YouTube"><i class="bi bi-youtube" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="Follow us on Pinterest"><i class="bi bi-pinterest" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="Follow us on LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-6 col-lg-2 col-md-3">
+        <nav aria-label="Quick links">
+          <div class="footer-heading">Quick Links</div>
+          <ul class="footer-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Affiliate Programme</a></li>
+            <li><a href="#">Sell on LaLa's Mart</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Categories -->
+      <div class="col-6 col-lg-2 col-md-3">
+        <nav aria-label="Category links">
+          <div class="footer-heading">Categories</div>
+          <ul class="footer-links">
+            <li><a href="#">Notebooks &amp; Diaries</a></li>
+            <li><a href="#">Pens &amp; Writing</a></li>
+            <li><a href="#">Art Supplies</a></li>
+            <li><a href="#">Office Supplies</a></li>
+            <li><a href="#">School Kits</a></li>
+            <li><a href="#">Geometry Boxes</a></li>
+            <li><a href="#">Files &amp; Folders</a></li>
+            <li><a href="#">Printing Materials</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Customer Service -->
+      <div class="col-6 col-lg-2 col-md-3">
+        <nav aria-label="Customer service links">
+          <div class="footer-heading">Customer Service</div>
+          <ul class="footer-links">
+            <li><a href="#">My Account</a></li>
+            <li><a href="#">Track My Order</a></li>
+            <li><a href="#">Returns &amp; Refunds</a></li>
+            <li><a href="#">Cancellation Policy</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Bulk Orders</a></li>
+            <li><a href="#">Gift Cards</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Contact -->
+      <div class="col-6 col-lg-2 col-md-3">
+        <div class="footer-heading">Contact Us</div>
+        <address style="font-style:normal;">
+          <div class="footer-contact-item">
+            <i class="bi bi-geo-alt-fill" aria-hidden="true"></i>
+            <span>42 Stationery Plaza, MG Road, Bengaluru – 560001, Karnataka, India</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="bi bi-telephone-fill" aria-hidden="true"></i>
+            <span>1800-XXX-XXXX<br><span style="font-size:12px;opacity:0.6;">Mon–Sat, 9 AM – 7 PM</span></span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="bi bi-envelope-fill" aria-hidden="true"></i>
+            <a href="mailto:support@lalasmart.in" style="color:rgba(255,255,255,0.55);text-decoration:none;">support@lalasmart.in</a>
+          </div>
+          <div class="footer-contact-item">
+            <i class="bi bi-whatsapp" aria-hidden="true"></i>
+            <a href="#" style="color:rgba(255,255,255,0.55);text-decoration:none;">WhatsApp Support</a>
+          </div>
+        </address>
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="row align-items-center g-3">
+        <div class="col-lg-6">
+          <p class="footer-bottom-text mb-0">
+            © 2024 LaLa's Mart Pvt. Ltd. All rights reserved. &nbsp;|&nbsp;
+            <a href="#" style="color:rgba(255,255,255,0.4);text-decoration:none;">Privacy Policy</a> &nbsp;|&nbsp;
+            <a href="#" style="color:rgba(255,255,255,0.4);text-decoration:none;">Terms of Use</a> &nbsp;|&nbsp;
+            <a href="#" style="color:rgba(255,255,255,0.4);text-decoration:none;">Sitemap</a>
+          </p>
+        </div>
+        <div class="col-lg-6 d-flex justify-content-lg-end">
+          <div class="footer-payment-icons" aria-label="Accepted payment methods">
+            <span class="payment-icon">UPI</span>
+            <span class="payment-icon">Visa</span>
+            <span class="payment-icon">Mastercard</span>
+            <span class="payment-icon">RuPay</span>
+            <span class="payment-icon">GPay</span>
+            <span class="payment-icon">PhonePe</span>
+            <span class="payment-icon">COD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== BACK TO TOP ===== -->
+<a href="#" class="back-to-top" aria-label="Back to top">
+  <i class="bi bi-chevron-up"></i>
+</a>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
