@@ -69,21 +69,30 @@
 
       <!-- Right Nav Actions -->
       <div class="d-none d-lg-flex align-items-center gap-2 ms-3 flex-shrink-0">
-        <a href="#" class="nav-action-btn" aria-label="Login to your account"><i class="bi bi-person"></i> Login</a>
-        <a href="#" class="nav-action-btn register" aria-label="Create a new account"><i class="bi bi-person-plus"></i> Register</a>
+        <a href="#" id="loginBtn" class="nav-action-btn">
+          <i class="bi bi-person"></i> Login
+        </a>
+        <a href="#" id="registerBtn" class="nav-action-btn register">
+          <i class="bi bi-person-plus"></i> Register
+        </a>
         <a href="#" class="icon-btn" aria-label="Wishlist (2 items)">
           <i class="bi bi-heart"></i>
           <span class="icon-badge">2</span>
         </a>
-        <a href="#" class="icon-btn" aria-label="Shopping cart (3 items)">
+        <a href="cart.html" class="icon-btn" aria-label="Shopping cart (3 items)">
           <i class="bi bi-bag"></i>
-          <span class="icon-badge">3</span>
+          <span
+            class="icon-badge"
+            id="cartCount"
+          >
+            0
+          </span>
         </a>
       </div>
 
       <!-- Mobile Toggle -->
       <div class="d-flex align-items-center gap-2 d-lg-none ms-auto">
-        <a href="#" class="icon-btn" aria-label="Shopping cart"><i class="bi bi-bag"></i><span class="icon-badge">3</span></a>
+        <a href="cart.html" class="icon-btn" aria-label="Shopping cart"><i class="bi bi-bag"></i><span class="icon-badge" id="cartCount">0</span></a>
         <button class="navbar-toggler border-0 ps-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-expanded="false" aria-label="Toggle navigation">
           <i class="bi bi-list" style="font-size:1.6rem;color:var(--lm-dark);"></i>
         </button>
@@ -105,8 +114,16 @@
             <li class="nav-item"><a class="nav-link" href="#">Deals</a></li>
           </ul>
           <div class="d-flex gap-2 mt-3">
-            <a href="#" class="nav-action-btn w-50 justify-content-center">Login</a>
-            <a href="#" class="nav-action-btn register w-50 justify-content-center">Register</a>
+            <a 
+              href="#"
+              id="mobileLoginBtn"
+              class="nav-action-btn w-50 justify-content-center"
+            >Login</a>
+            <a
+              href="#"
+              id="mobileRegisterBtn"
+              class="nav-action-btn register w-50 justify-content-center"
+            >Register</a>
           </div>
         </div>
       </div>
@@ -364,6 +381,15 @@
   </div>
 </section>
 
+<!-- ===== BEST SELLERS ===== -->
+<section id="best-sellers" class="section-pad" aria-labelledby="bestsellers-heading">
+  <div class="row g-3" id="products-container">
+    <div class="text-center">
+        Loading products...
+    </div>
+  </div>
+</section>
+
 <!-- ===== FLASH SALE ===== -->
 <section id="flash-sale" class="section-pad" aria-labelledby="flash-heading">
   <div class="container">
@@ -507,142 +533,6 @@
     </div>
     <div class="text-center mt-4">
       <a href="#" class="btn-lm-outline" style="color:#fff;border-color:rgba(255,255,255,0.3);" aria-label="View all flash sale products">View All Flash Deals <i class="bi bi-arrow-right ms-1"></i></a>
-    </div>
-  </div>
-</section>
-
-<!-- ===== BEST SELLERS ===== -->
-<section id="best-sellers" class="section-pad" aria-labelledby="bestsellers-heading">
-  <div class="container">
-    <div class="section-header d-flex justify-content-between align-items-end">
-      <div>
-        <span class="section-label">Top Picks</span>
-        <h2 id="bestsellers-heading" class="section-heading mt-1">Best Sellers</h2>
-        <span class="divider-accent mt-2 d-block"></span>
-      </div>
-      <a href="#" class="view-all-link d-none d-md-flex">View All <i class="bi bi-arrow-right"></i></a>
-    </div>
-    <div class="row g-3">
-      <!-- BS Product 1 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <article class="product-card" aria-label="Pilot V7 Hi-Tecpoint Pen">
-          <div class="product-img-wrap">
-            <span class="badge-hot">BESTSELLER</span>
-            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
-            <div class="product-img-placeholder" role="img" aria-label="Pilot V7 Pen product image">
-              <i class="bi bi-pen"></i>
-              <span>Product Image</span>
-            </div>
-          </div>
-          <div class="product-body">
-            <div class="product-brand">Pilot</div>
-            <h3 class="product-name">Pilot V7 Hi-Tecpoint Liquid Ink Roller Ball Pen Blue</h3>
-            <div class="product-rating">
-              <span class="stars" aria-label="5 stars">★★★★★</span>
-              <span class="rating-count">(8,941)</span>
-            </div>
-            <div class="product-price">
-              <span class="price-current">₹69</span>
-              <span class="price-original">₹95</span>
-              <span class="price-save">Save ₹26</span>
-            </div>
-            <div class="product-actions">
-              <button class="btn-add-cart" aria-label="Add Pilot V7 to cart"><i class="bi bi-bag-plus"></i> Add</button>
-              <button class="btn-buy-now" aria-label="Buy Pilot V7 now">Buy Now</button>
-            </div>
-          </div>
-        </article>
-      </div>
-      <!-- BS Product 2 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <article class="product-card" aria-label="Navneet A4 Notebook Pack">
-          <div class="product-img-wrap">
-            <span class="badge-hot">BESTSELLER</span>
-            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
-            <div class="product-img-placeholder" role="img" aria-label="Navneet Notebook product image">
-              <i class="bi bi-book-fill"></i>
-              <span>Product Image</span>
-            </div>
-          </div>
-          <div class="product-body">
-            <div class="product-brand">Navneet</div>
-            <h3 class="product-name">Navneet Youva A4 Soft Cover Notebook 240 Pages (Pack of 6)</h3>
-            <div class="product-rating">
-              <span class="stars" aria-label="4.5 stars">★★★★½</span>
-              <span class="rating-count">(4,230)</span>
-            </div>
-            <div class="product-price">
-              <span class="price-current">₹349</span>
-              <span class="price-original">₹480</span>
-              <span class="price-save">Save ₹131</span>
-            </div>
-            <div class="product-actions">
-              <button class="btn-add-cart" aria-label="Add Navneet Notebook Pack to cart"><i class="bi bi-bag-plus"></i> Add</button>
-              <button class="btn-buy-now" aria-label="Buy Navneet Notebook Pack now">Buy Now</button>
-            </div>
-          </div>
-        </article>
-      </div>
-      <!-- BS Product 3 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <article class="product-card" aria-label="Staedtler Mars Plastic Eraser">
-          <div class="product-img-wrap">
-            <span class="badge-hot">BESTSELLER</span>
-            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
-            <div class="product-img-placeholder" role="img" aria-label="Staedtler Eraser product image">
-              <i class="bi bi-eraser-fill"></i>
-              <span>Product Image</span>
-            </div>
-          </div>
-          <div class="product-body">
-            <div class="product-brand">Staedtler</div>
-            <h3 class="product-name">Staedtler Mars Plastic Premium Eraser Pack of 3</h3>
-            <div class="product-rating">
-              <span class="stars" aria-label="5 stars">★★★★★</span>
-              <span class="rating-count">(6,710)</span>
-            </div>
-            <div class="product-price">
-              <span class="price-current">₹89</span>
-              <span class="price-original">₹120</span>
-              <span class="price-save">Save ₹31</span>
-            </div>
-            <div class="product-actions">
-              <button class="btn-add-cart" aria-label="Add Staedtler Eraser to cart"><i class="bi bi-bag-plus"></i> Add</button>
-              <button class="btn-buy-now" aria-label="Buy Staedtler Eraser now">Buy Now</button>
-            </div>
-          </div>
-        </article>
-      </div>
-      <!-- BS Product 4 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <article class="product-card" aria-label="Luxor Ink Marker Set">
-          <div class="product-img-wrap">
-            <span class="badge-discount" aria-label="25 percent off">−25%</span>
-            <button class="wishlist-btn" aria-label="Add to wishlist"><i class="bi bi-heart"></i></button>
-            <div class="product-img-placeholder" role="img" aria-label="Luxor Marker product image">
-              <i class="bi bi-highlighter"></i>
-              <span>Product Image</span>
-            </div>
-          </div>
-          <div class="product-body">
-            <div class="product-brand">Luxor</div>
-            <h3 class="product-name">Luxor Ink Sketch Marker Set 24 Colours with Carry Case</h3>
-            <div class="product-rating">
-              <span class="stars" aria-label="4 stars">★★★★☆</span>
-              <span class="rating-count">(1,984)</span>
-            </div>
-            <div class="product-price">
-              <span class="price-current">₹599</span>
-              <span class="price-original">₹799</span>
-              <span class="price-save">Save ₹200</span>
-            </div>
-            <div class="product-actions">
-              <button class="btn-add-cart" aria-label="Add Luxor Markers to cart"><i class="bi bi-bag-plus"></i> Add</button>
-              <button class="btn-buy-now" aria-label="Buy Luxor Markers now">Buy Now</button>
-            </div>
-          </div>
-        </article>
-      </div>
     </div>
   </div>
 </section>
@@ -1238,6 +1128,75 @@
 
 <!-- Bootstrap 5 JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Your JS -->
+<script src="script.js"></script>
+
+<!-- AUTH MODAL -->
+
+<div id="authModal"
+style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+z-index:9999;
+">
+
+<div style="
+background:white;
+max-width:400px;
+margin:100px auto;
+padding:30px;
+border-radius:10px;
+">
+
+<h3 id="authTitle">Register</h3>
+
+<input
+id="authEmail"
+type="email"
+placeholder="Email"
+style="width:100%;padding:10px;margin:10px 0;"
+>
+
+<input
+id="authPassword"
+type="password"
+placeholder="Password"
+style="width:100%;padding:10px;margin:10px 0;"
+>
+
+<button
+id="authSubmit"
+style="
+width:100%;
+padding:12px;
+background:#ff5722;
+color:white;
+border:none;
+">
+Submit
+</button>
+
+<button
+id="closeModal"
+style="
+width:100%;
+margin-top:10px;
+padding:10px;
+">
+Close
+</button>
+
+</div>
+</div>
 
 </body>
 </html>

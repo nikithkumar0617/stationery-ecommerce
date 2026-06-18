@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Shop premium stationery at LaLa's Mart — notebooks, pens, art supplies and office essentials at the best prices." />
+<title>Product Details | LaLa's Mart</title>
+
+<!-- Bootstrap Icons (visual language only — no Bootstrap JS/CSS framework needed for this page) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+<!-- Google Fonts — matches homepage typography -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- Supabase JS Client (CDN, v2) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+  :root {
+    /* ===== Design tokens — matches LaLa's Mart style.css ===== */
+    --blue-50:  #EBF3FF;
+    --blue-100: #CCE0FF;
+    --blue-500: #1565C0;
+    --blue-600: #0D47A1;
+    --blue-700: #0A3880;
+    --orange-50:  #FFF4E6;
+    --orange-200: #FFCC80;
+    --orange-500: #FF8C00;
+    --orange-600: #E65100;
+    --orange-700: #BF360C;
+    --gray-50:  #FAFAFA;
+    --gray-100: #F5F5F5;
+    --gray-200: #EEEEEE;
+    --gray-300: #E0E0E0;
+    --gray-400: #BDBDBD;
+    --gray-500: #9E9E9E;
+    --gray-700: #616161;
+    --gray-900: #212121;
+    --color-success:    #1B8A4C;
+    --color-success-bg: #E8F5E9;
+    --color-danger:     #C0392B;
+    --color-danger-bg:  #FDEDEC;
+    --primary:        var(--blue-600);
+    --primary-hover:  var(--blue-700);
+    --primary-light:  var(--blue-50);
+    --accent:         var(--orange-500);
+    --accent-hover:   var(--orange-600);
+    --accent-light:   var(--orange-50);
+    --dark:           #0E1B2E;
+    --dark-mid:       #1C2D45;
+    --text-primary:   var(--gray-900);
+    --text-secondary: var(--gray-700);
+    --text-muted:     var(--gray-500);
+    --text-hint:      var(--gray-400);
+    --bg-body:        #F7F8FA;
+    --bg-surface:     #FFFFFF;
+    --bg-subtle:      var(--gray-100);
+    --border-color:   var(--gray-200);
+    --border-strong:  var(--gray-300);
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body:    'DM Sans', 'Segoe UI', system-ui, sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+    --shadow-xs: 0 1px 3px rgba(13,71,161,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-sm: 0 2px 8px rgba(13,71,161,0.08), 0 1px 3px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 16px rgba(13,71,161,0.10), 0 2px 6px rgba(0,0,0,0.06);
+    --shadow-lg: 0 8px 32px rgba(13,71,161,0.13), 0 3px 10px rgba(0,0,0,0.07);
+    --shadow-btn:  0 4px 14px rgba(13,71,161,0.28);
+    --shadow-accent-btn: 0 4px 14px rgba(255,140,0,0.35);
+    --transition-base:   all 0.25s cubic-bezier(0.4,0,0.2,1);
+    --transition-bounce: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--bg-body);
+    color: var(--text-primary);
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img { max-width: 100%; display: block; }
+  a { color: var(--primary); text-decoration: none; }
+  button { font-family: var(--font-body); cursor: pointer; }
+  .visually-hidden {
+    position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  /* ============== TOP UTILITY BAR ============== */
+  #top-bar {
+    background: var(--dark);
+    color: rgba(255,255,255,0.8);
+    font-size: 12.5px;
+    padding: 8px 0;
+  }
+  #top-bar .wrap {
+    max-width: 1200px; margin: 0 auto; padding: 0 20px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+  }
+  #top-bar a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 12px; }
+  #top-bar a:hover { color: var(--accent); }
+  .top-bar-promo { color: var(--orange-200); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+  /* ============== NAVBAR ============== */
+  header#site-header {
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky; top: 0; z-index: 500;
+    box-shadow: var(--shadow-sm);
+  }
+  .navbar-inner {
+    max-width: 1200px; margin: 0 auto; padding: 14px 20px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .lm-logo {
+    font-family: var(--font-display); font-size: 1.6rem; font-weight: 700;
+    color: var(--dark); text-decoration: none; flex-shrink: 0; letter-spacing: -0.02em;
+  }
+  .lm-logo span { color: var(--accent); }
+  .breadcrumb-trail {
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    font-size: 13px; color: var(--text-muted); flex: 1;
+  }
+  .breadcrumb-trail a { color: var(--text-muted); }
+  .breadcrumb-trail a:hover { color: var(--primary); }
+  .breadcrumb-trail .sep { color: var(--border-strong); }
+  .breadcrumb-trail .current { color: var(--text-primary); font-weight: 600; }
+  .nav-icons { display: flex; gap: 8px; flex-shrink: 0; }
+  .icon-btn {
+    position: relative; background: transparent; border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-sm); color: var(--text-secondary); font-size: 19px;
+    padding: 7px 11px; transition: var(--transition-bounce); display: inline-flex; align-items: center;
+  }
+  .icon-btn:hover { color: var(--primary); border-color: var(--primary); background: var(--primary-light); transform: translateY(-2px); }
+  .icon-badge {
+    position: absolute; top: -5px; right: -5px; background: linear-gradient(135deg, var(--accent), var(--orange-600));
+    color: #fff; font-size: 9px; font-weight: 700; min-width: 17px; height: 17px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; border: 2px solid var(--bg-surface);
+  }
+
+  /* ============== MAIN LAYOUT ============== */
+  main { max-width: 1200px; margin: 0 auto; padding: 28px 20px 64px; }
+
+  /* ============== LOADING STATE ============== */
+  #loading-state {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 100px 20px; gap: 18px; text-align: center;
+  }
+  .spinner {
+    width: 46px; height: 46px; border: 4px solid var(--border-color);
+    border-top-color: var(--primary); border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #loading-state p { color: var(--text-muted); font-size: 14px; margin: 0; }
+
+  /* ============== ERROR STATE ============== */
+  #error-state {
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    padding: 80px 20px; text-align: center; gap: 14px;
+    background: var(--bg-surface); border: 1.5px solid var(--border-color); border-radius: var(--radius-xl);
+  }
+  #error-state .bi { font-size: 52px; color: var(--color-danger); }
+  #error-state h2 { font-family: var(--font-display); font-size: 1.5rem; color: var(--dark); margin: 0; }
+  #error-state p { color: var(--text-muted); font-size: 14px; max-width: 420px; margin: 0; }
+
+  /* ============== PRODUCT DETAIL GRID ============== */
+  #product-detail { display: none; }
+  .product-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 44px;
+    background: var(--bg-surface); border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-xl); padding: 36px; box-shadow: var(--shadow-sm);
+  }
+
+  /* ---- Gallery ---- */
+  .gallery-main {
+    background: linear-gradient(135deg, var(--gray-100), var(--gray-50));
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    aspect-ratio: 1 / 1;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative; margin-bottom: 14px;
+  }
+  .gallery-main img {
+    width: 100%; height: 100%; object-fit: contain; padding: 28px;
+    transition: transform 0.4s ease;
+  }
+  .gallery-main:hover img { transform: scale(1.05); }
+  .gallery-badge {
+    position: absolute; top: 16px; left: 16px; font-size: 11px; font-weight: 800;
+    letter-spacing: 0.04em; text-transform: uppercase; padding: 5px 12px;
+    border-radius: var(--radius-sm); color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+  .gallery-badge.discount { background: linear-gradient(135deg, var(--color-danger), #A93226); }
+  .gallery-badge.out-of-stock { background: linear-gradient(135deg, var(--gray-700), var(--gray-900)); }
+  .gallery-wishlist {
+    position: absolute; top: 16px; right: 16px; width: 42px; height: 42px;
+    background: var(--bg-surface); border: 1.5px solid var(--border-color); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    color: var(--text-muted); transition: var(--transition-bounce); box-shadow: var(--shadow-xs);
+  }
+  .gallery-wishlist:hover { color: #E53935; border-color: #E53935; background: #FFEBEE; transform: scale(1.1); }
+  .gallery-wishlist.active { color: #E53935; border-color: #E53935; background: #FFEBEE; }
+  .gallery-thumbs { display: flex; gap: 10px; flex-wrap: wrap; }
+  .gallery-thumb {
+    width: 70px; height: 70px; border-radius: var(--radius-sm); border: 2px solid var(--border-color);
+    background: var(--gray-50); cursor: pointer; overflow: hidden; flex-shrink: 0;
+    transition: var(--transition-base); padding: 6px;
+  }
+  .gallery-thumb img { width: 100%; height: 100%; object-fit: contain; }
+  .gallery-thumb:hover { border-color: var(--primary); }
+  .gallery-thumb.active { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
+
+  /* ---- Info column ---- */
+  .product-brand-row {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+  }
+  .product-brand-tag {
+    font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.10em;
+    color: var(--primary); background: var(--primary-light); padding: 4px 11px; border-radius: var(--radius-sm);
+  }
+  .product-sku-tag { font-size: 12px; color: var(--text-hint); }
+  .product-title {
+    font-family: var(--font-display); font-size: clamp(1.5rem, 2.6vw, 2rem); font-weight: 700;
+    color: var(--dark); line-height: 1.25; margin: 0 0 12px;
+  }
+  .product-rating-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .stars { color: var(--accent); font-size: 15px; letter-spacing: 1.5px; }
+  .rating-score { font-size: 13.5px; font-weight: 700; color: var(--dark); }
+  .rating-count { font-size: 13px; color: var(--text-muted); }
+  .stock-pill {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600;
+    padding: 3px 11px; border-radius: var(--radius-full);
+  }
+  .stock-pill.in-stock { color: var(--color-success); background: var(--color-success-bg); }
+  .stock-pill.low-stock { color: #B45309; background: #FFFBEB; }
+  .stock-pill.out-stock { color: var(--color-danger); background: var(--color-danger-bg); }
+
+  /* ---- Price block ---- */
+  .price-block {
+    background: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-lg);
+    padding: 20px 22px; margin-bottom: 22px;
+  }
+  .price-row { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .price-current { font-family: var(--font-display); font-size: 2.1rem; font-weight: 700; color: var(--primary); line-height: 1; }
+  .price-original { font-size: 17px; color: var(--text-hint); text-decoration: line-through; }
+  .price-save-badge {
+    font-size: 12.5px; font-weight: 700; color: var(--color-success); background: var(--color-success-bg);
+    padding: 3px 10px; border-radius: var(--radius-sm);
+  }
+  .price-tax-note { font-size: 12.5px; color: var(--text-muted); margin: 0; }
+
+  /* ---- Description ---- */
+  .product-description {
+    font-size: 14.5px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 24px;
+  }
+  .product-description h3 {
+    font-family: var(--font-body); font-size: 13px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--dark); margin: 0 0 8px;
+  }
+
+  /* ---- Quantity selector ---- */
+  .qty-row { display: flex; align-items: center; gap: 18px; margin-bottom: 20px; flex-wrap: wrap; }
+  .qty-label { font-size: 13.5px; font-weight: 700; color: var(--dark); }
+  .qty-selector {
+    display: flex; align-items: center; border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-sm); overflow: hidden;
+  }
+  .qty-btn {
+    background: var(--bg-subtle); border: none; width: 38px; height: 38px; font-size: 16px;
+    color: var(--text-secondary); transition: var(--transition-base); display: flex; align-items: center; justify-content: center;
+  }
+  .qty-btn:hover:not(:disabled) { background: var(--primary-light); color: var(--primary); }
+  .qty-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .qty-input {
+    width: 52px; height: 38px; border: none; border-left: 1.5px solid var(--border-strong);
+    border-right: 1.5px solid var(--border-strong); text-align: center; font-size: 14px; font-weight: 600;
+    color: var(--text-primary); font-family: var(--font-body); outline: none;
+  }
+  .qty-stock-hint { font-size: 12.5px; color: var(--text-muted); }
+
+  /* ---- CTA buttons ---- */
+  .cta-row { display: flex; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+  .btn-add-cart, .btn-buy-now {
+    flex: 1; min-width: 160px; border: none; border-radius: var(--radius-sm);
+    font-family: var(--font-body); font-size: 14.5px; font-weight: 700; padding: 14px 20px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: var(--transition-bounce); cursor: pointer;
+  }
+  .btn-add-cart {
+    background: var(--primary-light); color: var(--primary); border: 1.5px solid rgba(13,71,161,0.2);
+  }
+  .btn-add-cart:hover:not(:disabled) { background: var(--primary); color: #fff; box-shadow: var(--shadow-btn); transform: translateY(-2px); }
+  .btn-buy-now {
+    background: linear-gradient(135deg, var(--accent), var(--orange-600)); color: #fff;
+  }
+  .btn-buy-now:hover:not(:disabled) { background: linear-gradient(135deg, var(--orange-600), var(--orange-700)); box-shadow: var(--shadow-accent-btn); transform: translateY(-2px); }
+  .btn-add-cart:disabled, .btn-buy-now:disabled {
+    opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important;
+  }
+
+  /* ---- Trust strip ---- */
+  .trust-strip {
+    display: flex; flex-wrap: wrap; gap: 16px; padding-top: 18px; border-top: 1px solid var(--border-color);
+  }
+  .trust-mini { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-secondary); }
+  .trust-mini .bi { font-size: 17px; color: var(--primary); }
+
+  /* ---- Toast ---- */
+  #toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--dark); color: #fff; padding: 13px 24px; border-radius: var(--radius-md);
+    font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px;
+    box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: var(--transition-base);
+    z-index: 999;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #toast .bi { color: #4ADE80; font-size: 18px; }
+  #toast.toast-error .bi { color: #F87171; }
+
+  /* ============== FOOTER (lightweight) ============== */
+  footer#mini-footer {
+    background: var(--dark); color: rgba(255,255,255,0.5); text-align: center;
+    padding: 26px 20px; font-size: 12.5px; margin-top: 40px;
+  }
+  footer#mini-footer a { color: rgba(255,255,255,0.5); }
+  footer#mini-footer a:hover { color: var(--accent); }
+
+  /* ============== RESPONSIVE ============== */
+  @media (max-width: 860px) {
+    .product-grid { grid-template-columns: 1fr; gap: 26px; padding: 22px; }
+    main { padding: 20px 14px 48px; }
+    .price-current { font-size: 1.75rem; }
+    .cta-row { flex-direction: column; }
+    .btn-add-cart, .btn-buy-now { min-width: 100%; }
+  }
+  @media (max-width: 480px) {
+    .navbar-inner { padding: 12px 14px; gap: 10px; }
+    .breadcrumb-trail { display: none; }
+    .lm-logo { font-size: 1.4rem; }
+    .product-title { font-size: 1.3rem; }
+    .gallery-thumb { width: 56px; height: 56px; }
+    #top-bar .wrap { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div id="top-bar">
+  <div class="wrap">
+    <span class="top-bar-promo"><i class="bi bi-lightning-charge-fill"></i> Back to School Sale — Up to 50% OFF!</span>
+    <a href="index.html"><i class="bi bi-arrow-left me-1"></i>Continue Shopping</a>
+  </div>
+</div>
+
+<!-- ===== HEADER / NAV ===== -->
+<header id="site-header">
+  <div class="navbar-inner">
+    <a href="index.html" class="lm-logo">LaLa's<span>Mart</span></a>
+    <nav class="breadcrumb-trail" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="sep">/</span>
+      <a href="index.html#featured-categories" id="breadcrumb-category">Products</a>
+      <span class="sep">/</span>
+      <span class="current" id="breadcrumb-current">Product</span>
+    </nav>
+    <div class="nav-icons">
+      <a href="#" class="icon-btn" aria-label="Wishlist"><i class="bi bi-heart"></i></a>
+      <a href="#" class="icon-btn" aria-label="Shopping cart">
+        <i class="bi bi-bag"></i>
+        <span class="icon-badge" id="cart-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===== LOADING STATE ===== -->
+  <div id="loading-state">
+    <div class="spinner" role="status" aria-label="Loading product"></div>
+    <p>Loading product details…</p>
+  </div>
+
+  <!-- ===== ERROR STATE ===== -->
+  <div id="error-state">
+    <i class="bi bi-exclamation-triangle"></i>
+    <h2 id="error-title">Product Not Found</h2>
+    <p id="error-message">We couldn't find the product you're looking for. It may have been removed or the link is incorrect.</p>
+    <a href="index.html" class="btn-add-cart" style="margin-top:8px; flex:none; padding:12px 28px;">
+      <i class="bi bi-house"></i> Back to Home
+    </a>
+  </div>
+
+  <!-- ===== PRODUCT DETAIL ===== -->
+  <article id="product-detail">
+    <div class="product-grid">
+
+      <!-- LEFT: Gallery -->
+      <div class="gallery-col">
+        <div class="gallery-main">
+          <span class="gallery-badge discount" id="discount-badge" style="display:none;"></span>
+          <span class="gallery-badge out-of-stock" id="oos-badge" style="display:none;">Out of Stock</span>
+          <button class="gallery-wishlist" id="wishlist-btn" aria-label="Add to wishlist" type="button">
+            <i class="bi bi-heart"></i>
+          </button>
+          <img id="main-image" src="" alt="Product image" />
+        </div>
+        <div class="gallery-thumbs" id="gallery-thumbs"></div>
+      </div>
+
+      <!-- RIGHT: Info -->
+      <div class="info-col">
+        <div class="product-brand-row">
+          <span class="product-brand-tag" id="product-brand">Brand</span>
+          <span class="product-sku-tag" id="product-sku"></span>
+        </div>
+
+        <h1 class="product-title" id="product-name">Loading…</h1>
+
+        <div class="product-rating-row">
+          <span class="stars" id="rating-stars" aria-hidden="true">★★★★★</span>
+          <span class="rating-score" id="rating-score">0.0</span>
+          <span class="rating-count" id="rating-count">(0 reviews)</span>
+          <span class="stock-pill in-stock" id="stock-pill">
+            <i class="bi bi-check-circle-fill"></i> <span id="stock-pill-text">In Stock</span>
+          </span>
+        </div>
+
+        <div class="price-block">
+          <div class="price-row">
+            <span class="price-current" id="price-current">₹0</span>
+            <span class="price-original" id="price-original" style="display:none;">₹0</span>
+            <span class="price-save-badge" id="price-save-badge" style="display:none;"></span>
+          </div>
+          <p class="price-tax-note"><i class="bi bi-info-circle"></i> Inclusive of all taxes. Free delivery on orders above ₹499.</p>
+        </div>
+
+        <div class="product-description" id="product-description-wrap">
+          <h3>About this product</h3>
+          <p id="product-description">Loading product description…</p>
+        </div>
+
+        <div class="qty-row">
+          <span class="qty-label">Quantity</span>
+          <div class="qty-selector">
+            <button class="qty-btn" id="qty-minus" type="button" aria-label="Decrease quantity">−</button>
+            <input type="text" class="qty-input" id="qty-input" value="1" inputmode="numeric" aria-label="Quantity" readonly>
+            <button class="qty-btn" id="qty-plus" type="button" aria-label="Increase quantity">+</button>
+          </div>
+          <span class="qty-stock-hint" id="qty-stock-hint"></span>
+        </div>
+
+        <div class="cta-row">
+          <button class="btn-add-cart" id="add-to-cart-btn" type="button">
+            <i class="bi bi-bag-plus"></i> Add to Cart
+          </button>
+          <button class="btn-buy-now" id="buy-now-btn" type="button">
+            <i class="bi bi-lightning-charge-fill"></i> Buy Now
+          </button>
+        </div>
+
+        <div class="trust-strip">
+          <span class="trust-mini"><i class="bi bi-truck"></i> Fast Delivery</span>
+          <span class="trust-mini"><i class="bi bi-shield-check"></i> Secure Payment</span>
+          <span class="trust-mini"><i class="bi bi-arrow-counterclockwise"></i> 7-Day Returns</span>
+          <span class="trust-mini"><i class="bi bi-patch-check"></i> 100% Genuine</span>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+</main>
+
+<footer id="mini-footer">
+  <p>&copy; 2024 LaLa's Mart Pvt. Ltd. · <a href="index.html">Home</a> · <a href="#">Privacy Policy</a> · <a href="#">Contact Us</a></p>
+</footer>
+
+<!-- ===== TOAST ===== -->
+<div id="toast" role="status" aria-live="polite">
+  <i class="bi bi-check-circle-fill"></i>
+  <span id="toast-message">Added to cart</span>
+</div>
+
+<script>
+/* ====================================================================
+   LALA'S MART — PRODUCT DETAIL PAGE
+   Vanilla JS + Supabase JS v2
+   ==================================================================== */
+
+(function () {
+  "use strict";
+
+  /* ---------------------------------------------------------------
+     1. SUPABASE CONFIGURATION
+     -------------------------------------------------------------- */
+  // ⚠️ Replace these with your actual Supabase project credentials.
+  // The anon/public key is safe to expose in client-side code —
+  // it only grants access permitted by your Row Level Security (RLS) policies.
+  const SUPABASE_URL =
+  "https://bojfqifnbwhavmcrxmkg.supabase.co";
+  
+  const SUPABASE_ANON_KEY =
+  "sb_publishable_3AIqLVymxDF06OsewH_Byg_V_YZ0atI";
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  /* Table/column names match the production schema:
+     products(id, category_id, name, slug, description, brand, sku,
+              price, discount_price, stock_qty, low_stock_alert,
+              images JSONB, attributes JSONB, is_active, is_featured,
+              average_rating, review_count, created_at, updated_at)
+     categories(id, name, slug, ...)
+  */
+  const PRODUCTS_TABLE = "products";
+  const CATEGORIES_TABLE = "categories";
+
+  const PLACEHOLDER_IMAGE =
+    "data:image/svg+xml;charset=UTF-8," +
+    encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+        <rect width="600" height="600" fill="#F5F5F5"/>
+        <g fill="none" stroke="#BDBDBD" stroke-width="2">
+          <rect x="170" y="180" width="260" height="240" rx="10"/>
+          <circle cx="240" cy="250" r="22"/>
+          <path d="M170 380 L260 300 L330 350 L390 290 L430 340 L430 410 L170 410 Z" fill="#E0E0E0" stroke="none"/>
+        </g>
+        <text x="300" y="460" font-family="DM Sans, sans-serif" font-size="16" fill="#9E9E9E" text-anchor="middle">
+          Image not available
+        </text>
+      </svg>`);
+
+  const CART_STORAGE_KEY = "lalasmart_cart";
+  const WISHLIST_STORAGE_KEY = "lalasmart_wishlist";
+
+  /* ---------------------------------------------------------------
+     2. DOM REFERENCES
+     -------------------------------------------------------------- */
+  const $loading      = document.getElementById("loading-state");
+  const $error         = document.getElementById("error-state");
+  const $errorTitle     = document.getElementById("error-title");
+  const $errorMessage   = document.getElementById("error-message");
+  const $detail        = document.getElementById("product-detail");
+
+  const $mainImage     = document.getElementById("main-image");
+  const $thumbs        = document.getElementById("gallery-thumbs");
+  const $discountBadge = document.getElementById("discount-badge");
+  const $oosBadge       = document.getElementById("oos-badge");
+  const $wishlistBtn    = document.getElementById("wishlist-btn");
+
+  const $brand          = document.getElementById("product-brand");
+  const $sku            = document.getElementById("product-sku");
+  const $name           = document.getElementById("product-name");
+  const $ratingStars     = document.getElementById("rating-stars");
+  const $ratingScore     = document.getElementById("rating-score");
+  const $ratingCount     = document.getElementById("rating-count");
+  const $stockPill       = document.getElementById("stock-pill");
+  const $stockPillText   = document.getElementById("stock-pill-text");
+
+  const $priceCurrent    = document.getElementById("price-current");
+  const $priceOriginal   = document.getElementById("price-original");
+  const $priceSaveBadge  = document.getElementById("price-save-badge");
+  const $description     = document.getElementById("product-description");
+
+  const $qtyInput  = document.getElementById("qty-input");
+  const $qtyMinus  = document.getElementById("qty-minus");
+  const $qtyPlus   = document.getElementById("qty-plus");
+  const $qtyStockHint = document.getElementById("qty-stock-hint");
+
+  const $addToCartBtn = document.getElementById("add-to-cart-btn");
+  const $buyNowBtn     = document.getElementById("buy-now-btn");
+  const $cartCount      = document.getElementById("cart-count");
+
+  const $breadcrumbCategory = document.getElementById("breadcrumb-category");
+  const $breadcrumbCurrent  = document.getElementById("breadcrumb-current");
+
+  const $toast        = document.getElementById("toast");
+  const $toastMessage  = document.getElementById("toast-message");
+
+  let currentProduct = null;
+  let currentMaxQty = 1;
+
+  /* ---------------------------------------------------------------
+     3. UTILITIES
+     -------------------------------------------------------------- */
+
+  function getProductIdFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id");
+  }
+
+  function formatPrice(value) {
+    const num = Number(value);
+    if (Number.isNaN(num)) return "₹0";
+    return "₹" + num.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str == null ? "" : String(str);
+    return div.innerHTML;
+  }
+
+  function renderStars(rating) {
+    const r = Math.max(0, Math.min(5, Number(rating) || 0));
+    const full = Math.floor(r);
+    const half = r - full >= 0.5;
+    let out = "★".repeat(full);
+    if (half) out += "½";
+    out += "☆".repeat(5 - full - (half ? 1 : 0));
+    return out;
+  }
+
+  /* Safely parses the `images` JSONB column.
+     Expected shape: [{ url, alt, is_primary }, ...]
+     Handles cases where Supabase returns it as a string, null, or malformed data. */
+  function parseImages(rawImages) {
+    let arr = rawImages;
+    if (typeof arr === "string") {
+      try { arr = JSON.parse(arr); } catch (e) { arr = []; }
+    }
+    if (!Array.isArray(arr)) arr = [];
+
+    const cleaned = arr
+      .filter((img) => img && typeof img === "object" && img.url)
+      .map((img) => ({
+        url: img.url,
+        alt: img.alt || "Product image",
+        is_primary: Boolean(img.is_primary),
+      }));
+
+    if (cleaned.length === 0) {
+      return [{ url: PLACEHOLDER_IMAGE, alt: "Image not available", is_primary: true }];
+    }
+
+    // Primary image first
+    cleaned.sort((a, b) => (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0));
+    return cleaned;
+  }
+
+  function showToast(message, isError) {
+    $toastMessage.textContent = message;
+    $toast.classList.toggle("toast-error", Boolean(isError));
+    $toast.querySelector(".bi").className = isError
+      ? "bi bi-x-circle-fill"
+      : "bi bi-check-circle-fill";
+    $toast.classList.add("show");
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(() => $toast.classList.remove("show"), 2600);
+  }
+
+  function setPageState(state) {
+    // state: 'loading' | 'error' | 'detail'
+    $loading.style.display = state === "loading" ? "flex" : "none";
+    $error.style.display   = state === "error" ? "flex" : "none";
+    $detail.style.display  = state === "detail" ? "block" : "none";
+  }
+
+  /* ---------------------------------------------------------------
+     4. CART / WISHLIST — localStorage-backed (client-side only)
+     -------------------------------------------------------------- */
+
+  function readCart() {
+    try {
+      const raw = localStorage.getItem(CART_STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function writeCart(cart) {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch (e) {
+      /* localStorage unavailable (private browsing, quota, etc.) — fail silently */
+    }
+    updateCartBadge();
+  }
+
+  function updateCartBadge() {
+    const cart = readCart();
+    const totalQty = cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
+    $cartCount.textContent = totalQty;
+  }
+
+  function addToCart(product, quantity) {
+    const cart = readCart();
+    const effectivePrice = product.discount_price != null ? product.discount_price : product.price;
+    const existing = cart.find((item) => item.product_id === product.id);
+
+    if (existing) {
+      existing.quantity = Math.min(existing.quantity + quantity, product.stock_qty || 9999);
+    } else {
+      cart.push({
+        product_id: product.id,
+        name: product.name,
+        sku: product.sku,
+        unit_price: effectivePrice,
+        quantity: quantity,
+        image: parseImages(product.images)[0].url,
+      });
+    }
+    writeCart(cart);
+  }
+
+  function isWishlisted(productId) {
+    try {
+      const raw = localStorage.getItem(WISHLIST_STORAGE_KEY);
+      const list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) && list.includes(productId);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function toggleWishlist(productId) {
+    let list = [];
+    try {
+      const raw = localStorage.getItem(WISHLIST_STORAGE_KEY);
+      list = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(list)) list = [];
+    } catch (e) {
+      list = [];
+    }
+
+    const idx = list.indexOf(productId);
+    const nowActive = idx === -1;
+    if (nowActive) {
+      list.push(productId);
+    } else {
+      list.splice(idx, 1);
+    }
+
+    try {
+      localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(list));
+    } catch (e) { /* ignore */ }
+
+    return nowActive;
+  }
+
+  /* ---------------------------------------------------------------
+     5. RENDERING
+     -------------------------------------------------------------- */
+
+  function renderGallery(images) {
+    $mainImage.src = images[0].url;
+    $mainImage.alt = images[0].alt;
+    $mainImage.onerror = function () {
+      this.onerror = null;
+      this.src = PLACEHOLDER_IMAGE;
+    };
+
+    $thumbs.innerHTML = "";
+    if (images.length <= 1) return; // No thumbnail strip needed for a single image
+
+    images.forEach((img, index) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "gallery-thumb" + (index === 0 ? " active" : "");
+      btn.setAttribute("aria-label", "View image " + (index + 1));
+      btn.innerHTML = `<img src="${escapeHtml(img.url)}" alt="${escapeHtml(img.alt)}" />`;
+      btn.addEventListener("click", () => {
+        $mainImage.src = img.url;
+        $mainImage.alt = img.alt;
+        $thumbs.querySelectorAll(".gallery-thumb").forEach((t) => t.classList.remove("active"));
+        btn.classList.add("active");
+      });
+      $thumbs.appendChild(btn);
+    });
+  }
+
+  function renderProduct(product, categoryName) {
+    currentProduct = product;
+
+    const images = parseImages(product.images);
+    renderGallery(images);
+
+    // Brand / SKU
+    $brand.textContent = product.brand || "LaLa's Mart";
+    $sku.textContent = product.sku ? "SKU: " + product.sku : "";
+
+    // Title
+    $name.textContent = product.name || "Unnamed Product";
+    document.title = (product.name || "Product") + " | LaLa's Mart";
+
+    // Breadcrumb
+    $breadcrumbCurrent.textContent = product.name || "Product";
+    if (categoryName) {
+      $breadcrumbCategory.textContent = categoryName;
+    }
+
+    // Rating
+    const rating = Number(product.average_rating) || 0;
+    const reviewCount = Number(product.review_count) || 0;
+    $ratingStars.textContent = renderStars(rating);
+    $ratingScore.textContent = rating.toFixed(1);
+    $ratingCount.textContent = "(" + reviewCount.toLocaleString("en-IN") + (reviewCount === 1 ? " review)" : " reviews)");
+
+    // Stock state
+    const stockQty = Number(product.stock_qty) || 0;
+    const lowStockThreshold = Number(product.low_stock_alert) || 10;
+    currentMaxQty = stockQty;
+
+    $oosBadge.style.display = stockQty <= 0 ? "flex" : "none";
+
+    if (stockQty <= 0) {
+      $stockPill.className = "stock-pill out-stock";
+      $stockPillText.textContent = "Out of Stock";
+      $stockPill.querySelector(".bi").className = "bi bi-x-circle-fill";
+    } else if (stockQty <= lowStockThreshold) {
+      $stockPill.className = "stock-pill low-stock";
+      $stockPillText.textContent = "Only " + stockQty + " left";
+      $stockPill.querySelector(".bi").className = "bi bi-exclamation-circle-fill";
+    } else {
+      $stockPill.className = "stock-pill in-stock";
+      $stockPillText.textContent = "In Stock";
+      $stockPill.querySelector(".bi").className = "bi bi-check-circle-fill";
+    }
+
+    // Pricing
+    const basePrice = Number(product.price) || 0;
+    const discountPrice = product.discount_price != null ? Number(product.discount_price) : null;
+    const hasDiscount = discountPrice != null && discountPrice < basePrice;
+
+    if (hasDiscount) {
+      $priceCurrent.textContent = formatPrice(discountPrice);
+      $priceOriginal.textContent = formatPrice(basePrice);
+      $priceOriginal.style.display = "inline";
+      const pctOff = Math.round(((basePrice - discountPrice) / basePrice) * 100);
+      $priceSaveBadge.textContent = "Save " + formatPrice(basePrice - discountPrice) + " (" + pctOff + "% OFF)";
+      $priceSaveBadge.style.display = "inline-block";
+      $discountBadge.textContent = "−" + pctOff + "%";
+      $discountBadge.style.display = "block";
+    } else {
+      $priceCurrent.textContent = formatPrice(basePrice);
+      $priceOriginal.style.display = "none";
+      $priceSaveBadge.style.display = "none";
+      $discountBadge.style.display = "none";
+    }
+
+    // Description
+    $description.textContent = product.description && product.description.trim().length > 0
+      ? product.description
+      : "No description has been added for this product yet.";
+
+    // Quantity controls
+    $qtyInput.value = "1";
+    if (stockQty <= 0) {
+      $qtyStockHint.textContent = "Currently unavailable";
+      $qtyPlus.disabled = true;
+      $qtyMinus.disabled = true;
+      $qtyInput.disabled = true;
+    } else {
+      $qtyStockHint.textContent = stockQty + " in stock";
+      $qtyPlus.disabled = false;
+      $qtyMinus.disabled = false;
+      $qtyInput.disabled = false;
+    }
+
+    // CTA buttons
+    const outOfStock = stockQty <= 0;
+    $addToCartBtn.disabled = outOfStock;
+    $buyNowBtn.disabled = outOfStock;
+    $addToCartBtn.innerHTML = outOfStock
+      ? '<i class="bi bi-bag-x"></i> Out of Stock'
+      : '<i class="bi bi-bag-plus"></i> Add to Cart';
+    $buyNowBtn.innerHTML = outOfStock
+      ? '<i class="bi bi-bag-x"></i> Unavailable'
+      : '<i class="bi bi-lightning-charge-fill"></i> Buy Now';
+
+    // Wishlist initial state
+    if (isWishlisted(product.id)) {
+      $wishlistBtn.classList.add("active");
+      $wishlistBtn.querySelector(".bi").className = "bi bi-heart-fill";
+    }
+
+    updateCartBadge();
+    setPageState("detail");
+  }
+
+  /* ---------------------------------------------------------------
+     6. SUPABASE DATA FETCHING
+     -------------------------------------------------------------- */
+
+  async function fetchProduct(productId) {
+    // Select exact columns from the production schema — avoids
+    // over-fetching and keeps the query self-documenting.
+    const { data, error } = await supabase
+      .from(PRODUCTS_TABLE)
+      .select(
+        "id, category_id, name, slug, description, brand, sku, price, " +
+        "discount_price, stock_qty, low_stock_alert, images, attributes, " +
+        "is_active, average_rating, review_count"
+      )
+      .eq("id", productId)
+      .eq("is_active", true)
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  async function fetchCategoryName(categoryId) {
+    if (!categoryId) return null;
+    try {
+      const { data, error } = await supabase
+        .from(CATEGORIES_TABLE)
+        .select("name")
+        .eq("id", categoryId)
+        .single();
+      if (error) return null;
+      return data ? data.name : null;
+    } catch (e) {
+      return null; // Category lookup is a nice-to-have; never block the page on it
+    }
+  }
+
+  async function init() {
+    setPageState("loading");
+    updateCartBadge();
+
+    const productId = getProductIdFromUrl();
+
+    if (!productId) {
+      $errorTitle.textContent = "No Product Selected";
+      $errorMessage.textContent = "This page needs a product ID in the URL, e.g. product.html?id=YOUR_PRODUCT_ID";
+      setPageState("error");
+      return;
+    }
+
+    try {
+      const product = await fetchProduct(productId);
+
+      if (!product) {
+        $errorTitle.textContent = "Product Not Found";
+        $errorMessage.textContent = "We couldn't find a product matching this ID. It may have been removed or is no longer available.";
+        setPageState("error");
+        return;
+      }
+
+      const categoryName = await fetchCategoryName(product.category_id);
+      renderProduct(product, categoryName);
+
+    } catch (err) {
+      console.error("Failed to load product:", err);
+
+      // PGRST116 / "no rows" from .single() → product genuinely doesn't exist
+      const notFound = err && (err.code === "PGRST116" || /no rows/i.test(err.message || ""));
+
+      $errorTitle.textContent = notFound ? "Product Not Found" : "Something Went Wrong";
+      $errorMessage.textContent = notFound
+        ? "We couldn't find a product matching this ID. It may have been removed or is no longer available."
+        : "We're having trouble loading this product right now. Please check your connection and try again.";
+      setPageState("error");
+    }
+  }
+
+  /* ---------------------------------------------------------------
+     7. EVENT LISTENERS
+     -------------------------------------------------------------- */
+
+  $qtyMinus.addEventListener("click", () => {
+    const val = Math.max(1, parseInt($qtyInput.value, 10) - 1);
+    $qtyInput.value = val;
+  });
+
+  $qtyPlus.addEventListener("click", () => {
+    const val = Math.min(currentMaxQty || 1, parseInt($qtyInput.value, 10) + 1);
+    $qtyInput.value = val;
+    if (parseInt($qtyInput.value, 10) >= currentMaxQty) {
+      showToast("Maximum available stock reached", true);
+    }
+  });
+
+  $wishlistBtn.addEventListener("click", () => {
+    if (!currentProduct) return;
+    const nowActive = toggleWishlist(currentProduct.id);
+    $wishlistBtn.classList.toggle("active", nowActive);
+    $wishlistBtn.querySelector(".bi").className = nowActive ? "bi bi-heart-fill" : "bi bi-heart";
+    showToast(nowActive ? "Added to wishlist" : "Removed from wishlist");
+  });
+
+  $addToCartBtn.addEventListener("click", () => {
+    if (!currentProduct || $addToCartBtn.disabled) return;
+    const qty = Math.max(1, parseInt($qtyInput.value, 10) || 1);
+    addToCart(currentProduct, qty);
+    showToast(qty + " × " + currentProduct.name + " added to cart");
+  });
+
+  $buyNowBtn.addEventListener("click", () => {
+    if (!currentProduct || $buyNowBtn.disabled) return;
+    const qty = Math.max(1, parseInt($qtyInput.value, 10) || 1);
+    addToCart(currentProduct, qty);
+    // Redirect straight to checkout with this item already in the cart.
+    showToast("Checkout page coming soon");
+  });
+
+  /* ---------------------------------------------------------------
+     8. BOOTSTRAP
+     -------------------------------------------------------------- */
+  document.addEventListener("DOMContentLoaded", init);
+
+})();
+</script>
+
+</body>
+</html>

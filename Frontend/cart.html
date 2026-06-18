@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - LaLa's Mart</title>
+
+    <style>
+
+        body{
+            font-family:Arial,sans-serif;
+            padding:40px;
+            background:#f5f5f5;
+        }
+
+        h1{
+            margin-bottom:30px;
+        }
+
+        .cart-item{
+            background:white;
+            padding:20px;
+            margin-bottom:15px;
+            border-radius:10px;
+        }
+
+        .price{
+            color:green;
+            font-weight:bold;
+        }
+
+        button{
+            padding:8px 15px;
+            border:none;
+            background:#ff5722;
+            color:white;
+            cursor:pointer;
+            border-radius:5px;
+        }
+
+        #total{
+            margin-top:30px;
+            font-size:24px;
+            font-weight:bold;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Your Cart</h1>
+
+    <div id="cartItems"></div>
+
+    <div id="total"></div>
+
+    <script>
+
+        let cart =
+        JSON.parse(
+            localStorage.getItem("cart")
+        ) || [];
+
+        const container =
+        document.getElementById("cartItems");
+
+        let total = 0;
+        
+        const groupedCart = {};
+        
+        cart.forEach(product => {
+            
+            if(groupedCart[product.id]){
+                
+                groupedCart[product.id].quantity++;
+            
+            }else{
+                
+                groupedCart[product.id] = {
+                    ...product,
+                    quantity: 1
+                };
+            }
+        });
+        
+        Object.values(groupedCart).forEach(product => {
+            
+            total += Number(product.price) * product.quantity;
+            
+            container.innerHTML += `
+            
+            <div class="cart-item">
+                
+                <h3>${product.name}</h3>
+                
+                <p class="price">
+                    ₹${product.price}
+                    
+                </p>
+                    
+                    <p>
+                        
+                        Quantity :
+                        
+                        <button onclick="decreaseQty('${product.id}')">-</button>
+                        
+                        <strong>
+                            ${product.quantity}
+                            
+                        </strong>
+                            
+                        <button onclick="increaseQty('${product.id}')">+</button>
+                            
+                    </p>
+                            
+                    <button
+                        onclick="removeProduct('${product.id}')"
+                    >
+                        Remove All
+                    </button>
+                </div>
+            `;
+        });
+        document
+        .getElementById("total")
+        .innerText =
+        "Total : ₹" + total;
+
+function increaseQty(id){
+
+    const item =
+    cart.find(product => product.id === id);
+
+    if(item){
+        cart.push({...item});
+    }
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+    location.reload();
+}
+
+function decreaseQty(id){
+
+    const index =
+    cart.findIndex(
+        product => product.id === id
+    );
+
+    if(index !== -1){
+        cart.splice(index,1);
+    }
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+    location.reload();
+}
+
+function removeProduct(id){
+
+    cart =
+    cart.filter(
+        product => product.id !== id
+    );
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+    location.reload();
+}
+
+    </script>
+
+</body>
+</html>
