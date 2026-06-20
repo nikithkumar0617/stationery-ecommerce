@@ -1015,6 +1015,58 @@
   document.addEventListener("DOMContentLoaded", init);
 
 })();
+
+function addToWishlist(){
+
+    let wishlist =
+    JSON.parse(
+        localStorage.getItem(
+            "wishlist"
+        )
+    ) || [];
+
+    const exists =
+    wishlist.find(
+        item =>
+        item.id === currentProduct.id
+    );
+
+    if(exists){
+
+        alert(
+            "Already in wishlist"
+        );
+
+        return;
+    }
+
+    wishlist.push({
+
+        id:
+        currentProduct.id,
+
+        name:
+        currentProduct.name,
+
+        price:
+        currentProduct.discount_price ||
+        currentProduct.price,
+
+        sku:
+        currentProduct.sku
+
+    });
+
+    localStorage.setItem(
+        "wishlist",
+        JSON.stringify(wishlist)
+    );
+
+    alert(
+        "Added to Wishlist ❤️"
+    );
+
+}
 </script>
 
 </body>

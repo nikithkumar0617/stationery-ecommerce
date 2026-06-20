@@ -1,3 +1,5 @@
+let allProducts = [];
+
 const SUPABASE_URL =
 "https://bojfqifnbwhavmcrxmkg.supabase.co";
 
@@ -17,6 +19,8 @@ async function loadProducts() {
         .from("products")
         .select("*");
 
+    allProducts = data;
+
     if (error) {
         console.error(error);
         return;
@@ -32,13 +36,19 @@ async function loadProducts() {
         const currentPrice =
             product.discount_price || product.price;
 
+            const imageUrl =
+                product.images &&
+                product.images.length > 0
+                    ? product.images[0].url
+                    : "https://via.placeholder.com/300x300";
+
         container.innerHTML += `
         <div class="col-6 col-md-4 col-lg-3">
             <article class="product-card">
 
                 <div class="product-img-wrap">
                     <img
-                        src="https://via.placeholder.com/300x300/eeeeee/333333?text=LaLa+Mart"
+                        src="${imageUrl}"
                         alt="${product.name}"
                         style="
                             width:100%;
@@ -83,20 +93,23 @@ async function loadProducts() {
                     </div>
 
                     <div class="product-actions">
+                    
+                        <span
 
-                        <button
-                        class="btn-add-cart"
-                        data-id="${product.id}"
-                        data-name="${product.name}"
-                        data-price="${currentPrice}"
-                        >
-                        Add
-                        </button>
-
+                            class="cart-controls"
+                            data-id="${product.id}"
+                            data-name="${product.name}"
+                            data-price="${currentPrice}"
+                            data-sku="${product.sku}"
+                    
+                        ></span>
+                    
                         <button class="btn-buy-now">
+                    
                             Buy Now
+                    
                         </button>
-
+                    
                     </div>
 
                 </div>
@@ -104,36 +117,12 @@ async function loadProducts() {
             </article>
         </div>
         `;
+
+        renderCartControls(product.id);
     });
 }
 
 loadProducts();
-document.addEventListener("click", (e) => {
-
-    if (!e.target.classList.contains("btn-add-cart")) {
-        return;
-    }
-
-    const product = {
-        id: e.target.dataset.id,
-        name: e.target.dataset.name,
-        price: e.target.dataset.price
-    };
-
-    let cart =
-        JSON.parse(localStorage.getItem("cart")) || [];
-
-    cart.push(product);
-
-    localStorage.setItem(
-        "cart",
-        JSON.stringify(cart)
-    );
-
-    updateCartCount();
-
-    alert(product.name + " added to cart");
-});
 
 window.addEventListener("load", () => {
 
@@ -202,8 +191,17 @@ window.addEventListener("load", () => {
             console.log(error);
             
             if(error) {
+                
                 alert(error.message);
             } else {
+                await supabaseClient
+                .from("users")
+                .insert([
+                    {
+                        email: email
+                    }
+                ]);
+                
                 alert("Registration Successful");
             }
 
@@ -227,6 +225,21 @@ window.addEventListener("load", () => {
                     "userEmail",
                     email
                 );
+
+                const { data: dbUser } =
+                await supabaseClient
+                .from("users")
+                .select("id")
+                .eq("email", email)
+                .single();
+                
+                if(dbUser){
+                    
+                    localStorage.setItem(
+                        "userId",
+                        dbUser.id
+                    );
+                }
                 
                 alert("Login Successful");
                 location.reload();
@@ -287,3 +300,256 @@ function updateCartCount() {
 }
 
 updateCartCount();
+
+function getCart() {
+    return JSON.parse(
+        localStorage.getItem("cart")
+    ) || [];
+}
+
+function saveCart(cart) {
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+    updateCartCount();
+}
+
+function getQty(id){
+
+    const item =
+    getCart().find(
+        p => p.id === id
+    );
+
+    return item
+        ? item.quantity || 0
+        : 0;
+}
+
+function changeQty(product, delta){
+
+    let cart = getCart();
+
+    const index =
+    cart.findIndex(
+        p => p.id === product.id
+    );
+
+    if(index === -1 && delta > 0){
+
+        cart.push({
+            ...product,
+            quantity: 1
+        });
+
+    } else if(index !== -1){
+
+        cart[index].quantity =
+            (cart[index].quantity || 0)
+            + delta;
+
+        if(cart[index].quantity <= 0){
+            cart.splice(index,1);
+        }
+    }
+
+    saveCart(cart);
+
+    renderCartControls(product.id);
+}
+
+function renderCartControls(id){
+
+    const el =
+    document.querySelector(
+        `.cart-controls[data-id="${id}"]`
+    );
+
+    if(!el) return;
+
+    const qty = getQty(id);
+
+    if(qty > 0){
+
+        el.innerHTML = `
+            <button
+                class="qty-minus"
+                data-id="${id}"
+            >
+                -
+            </button>
+
+            <span
+                style="padding:0 10px;"
+            >
+                ${qty}
+            </span>
+
+            <button
+                class="qty-plus"
+                data-id="${id}"
+            >
+                +
+            </button>
+        `;
+
+    } else {
+
+        el.innerHTML = `
+            <button
+                class="btn-add-cart"
+                data-id="${id}"
+            >
+                Add
+            </button>
+        `;
+    }
+}
+
+document.addEventListener("click", (e) => {
+
+    if(e.target.classList.contains("btn-add-cart")){
+
+        const id =
+            e.target.dataset.id;
+
+        const card =
+            e.target.closest(".product-card");
+
+        const name =
+            card.querySelector(".product-name")
+            .innerText;
+
+        const price =
+            card.querySelector(".price-current")
+            .innerText
+            .replace("₹","");
+
+        const controls =
+            card.querySelector(".cart-controls");
+        
+        const sku =
+            controls.dataset.sku;
+
+        changeQty(
+            {
+                id:id,
+                name:name,
+                price:price,
+                sku:sku
+            },
+            1
+        );
+
+    }
+
+    if(e.target.classList.contains("qty-plus")){
+
+        const id =
+            e.target.dataset.id;
+
+        const cart =
+            getCart();
+
+        const item =
+            cart.find(
+                p => p.id === id
+            );
+
+        if(item){
+            changeQty(item,1);
+        }
+
+    }
+
+    if(e.target.classList.contains("qty-minus")){
+
+        const id =
+            e.target.dataset.id;
+
+        const cart =
+            getCart();
+
+        const item =
+            cart.find(
+                p => p.id === id
+            );
+
+        if(item){
+            changeQty(item,-1);
+        }
+
+    }
+
+});
+
+const searchInput =
+document.getElementById("searchInput");
+
+if(searchInput){
+
+    searchInput.addEventListener(
+        "input",
+        function(){
+
+            const searchText =
+            this.value.toLowerCase();
+
+            const cards =
+            document.querySelectorAll(
+                ".product-card"
+            );
+
+            cards.forEach(card => {
+
+                const productName =
+                card.querySelector(
+                    ".product-name"
+                )
+                .innerText
+                .toLowerCase();
+
+                const brandName =
+                card.querySelector(
+                    ".product-brand"
+                )
+                .innerText
+                .toLowerCase();
+
+                if(
+                    productName.includes(searchText)
+                    ||
+                    brandName.includes(searchText)
+                ){
+
+                    card.parentElement.style.display =
+                    "block";
+
+                }else{
+
+                    card.parentElement.style.display =
+                    "none";
+
+                }
+
+            });
+
+            if(searchText.trim() !== ""){
+
+                document
+                .getElementById(
+                    "products-container"
+                )
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+
+            }
+
+        }
+    );
+
+}

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Orders - LaLa's Mart</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+    <style>
+
+        body{
+            font-family:Arial;
+            background:#f5f5f5;
+            padding:30px;
+        }
+
+        .order-card{
+
+            background:white;
+            padding:20px;
+            margin-bottom:20px;
+            border-radius:10px;
+
+        }
+
+        .status{
+            font-weight:bold;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>My Orders</h1>
+
+<div id="ordersContainer">
+Loading Orders...
+</div>
+
+<script>
+
+const supabaseClient =
+supabase.createClient(
+    "https://bojfqifnbwhavmcrxmkg.supabase.co",
+    "sb_publishable_3AIqLVymxDF06OsewH_Byg_V_YZ0atI"
+);
+
+loadOrders();
+
+function getStatusColor(status){
+
+    switch(status?.toLowerCase()){
+
+        case "pending":
+            return "#f39c12";
+
+        case "confirmed":
+            return "#3498db";
+
+        case "shipped":
+            return "#9b59b6";
+
+        case "delivered":
+            return "#27ae60";
+
+        case "cancelled":
+            return "#e74c3c";
+
+        default:
+            return "#666";
+    }
+
+}
+
+async function loadOrders(){
+
+    const userId =
+    localStorage.getItem("userId");
+
+    const {
+        data: orders,
+        error
+    } =
+    await supabaseClient
+    .from("orders")
+    .select("*")
+    .eq("user_id", userId)
+    .order("placed_at", {
+        ascending:false
+    });
+
+    const container =
+    document.getElementById(
+        "ordersContainer"
+    );
+
+    if(!orders || orders.length===0){
+
+        container.innerHTML =
+        "<h3>No Orders Found</h3>";
+
+        return;
+    }
+
+    container.innerHTML = "";
+
+    for(const order of orders){
+        const {
+            data: items
+        } =
+        await supabaseClient
+        .from("order_items")
+        .select("*")
+        .eq("order_id", order.id);
+        
+        let productsHtml = "";
+        
+        items.forEach(item=>{
+            
+            productsHtml += `
+            <li>
+                ${item.product_name}
+                (Qty: ${item.quantity})
+            </li>
+            `;
+        });
+
+        if(productsHtml === ""){
+            
+            productsHtml =
+            "<li>No products recorded</li>";
+
+        }
+
+        container.innerHTML += `
+
+        <div class="order-card">
+
+            <h3>
+                ${order.order_number}
+            </h3>
+
+            <a
+            href="track-order.html?id=${order.id}"
+            style="
+            display:inline-block;
+            margin-bottom:10px;
+            "
+            >
+            Track Order
+            </a>
+            
+            <h4>
+                Products
+            </h4>
+
+            <ul>
+                ${productsHtml}
+            </ul>
+
+            <p>
+                Total :
+                ₹${order.total_amount}
+            </p>
+
+            <p>
+                Status :
+                <span
+                    class="status"
+                    style="
+                        color:${getStatusColor(order.status)};
+                    "
+                >
+                    ${order.status}
+                </span>
+            </p>
+
+            <p>
+                Date :
+                ${new Date(
+                    order.placed_at
+                ).toLocaleString()}
+            </p>
+
+       </div>
+
+       `;
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

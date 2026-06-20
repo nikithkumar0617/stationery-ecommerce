@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout - LaLa's Mart</title>
+
+    <style>
+
+        body{
+            font-family:Arial;
+            padding:40px;
+            background:#f5f5f5;
+        }
+
+        input,
+        textarea{
+
+            width:100%;
+            padding:12px;
+            margin-bottom:15px;
+
+        }
+
+        button{
+
+            padding:12px 20px;
+            border:none;
+            background:#ff5722;
+            color:white;
+            cursor:pointer;
+
+        }
+
+        .box{
+
+            background:white;
+            padding:25px;
+            border-radius:10px;
+            max-width:700px;
+
+        }
+
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+<div class="box">
+
+    <h1>Checkout</h1>
+
+    <input
+        id="customerName"
+        placeholder="Full Name"
+    >
+
+    <input
+        id="customerPhone"
+        placeholder="Phone Number"
+    >
+
+    <textarea
+        id="customerAddress"
+        placeholder="Delivery Address"
+    ></textarea>
+
+    <h3 id="orderTotal"></h3>
+
+    <button
+        onclick="placeOrder()"
+    >
+        Place Order
+    </button>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://bojfqifnbwhavmcrxmkg.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_3AIqLVymxDF06OsewH_Byg_V_YZ0atI";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+let cart =
+JSON.parse(
+    localStorage.getItem("cart")
+) || [];
+
+let total = 0;
+
+cart.forEach(item => {
+
+    total +=
+        Number(item.price);
+
+});
+
+document
+.getElementById("orderTotal")
+.innerText =
+"Order Total : ₹" + total;
+
+async function placeOrder(){
+
+    const userId =
+    localStorage.getItem("userId");
+
+    if(!userId){
+
+        alert("Please Login First");
+        return;
+    }
+
+    const customerName =
+    document.getElementById(
+        "customerName"
+    ).value;
+
+    const customerPhone =
+    document.getElementById(
+        "customerPhone"
+    ).value;
+
+    const customerAddress =
+    document.getElementById(
+        "customerAddress"
+    ).value;
+
+    const orderNumber =
+    "ORD-" + Date.now();
+
+    const {
+        data: orderData,
+        error: orderError
+    } =
+    await supabaseClient
+    .from("orders")
+    .insert([
+        {
+            user_id: userId,
+            order_number: orderNumber,
+            status: "pending",
+
+            subtotal: total,
+            discount_amount: 0,
+            shipping_charge: 0,
+            tax_amount: 0,
+            total_amount: total,
+
+            shipping_name: customerName,
+            shipping_phone: customerPhone,
+            shipping_address: customerAddress,
+
+            shipping_city: "Warangal",
+            shipping_state: "Telangana",
+            shipping_pincode: "506002",
+            shipping_country: "India"
+        }
+    ])
+    .select()
+    .single();
+
+    if(orderError){
+
+        console.error(orderError);
+        alert(orderError.message);
+        return;
+    }
+
+    for(const item of cart){
+
+        const { data, error } =
+        await supabaseClient
+        .from("order_items")
+        .insert([
+            {
+                order_id: orderData.id,
+
+                product_id: item.id,
+
+                product_name: item.name,
+
+                product_sku: item.sku || "SKU-001",
+
+                quantity: item.quantity || 1,
+
+                unit_price: Number(item.price),
+
+                discount_price: Number(item.price),
+
+                line_total:
+                Number(item.price) *
+                (item.quantity || 1)
+            }
+        ]);
+
+        console.log(data);
+        console.log(error);
+    }
+
+    localStorage.removeItem(
+        "cart"
+    );
+
+    alert(
+        "Order Saved To Database"
+    );
+
+    window.location.href =
+    "order-success.html";
+}
+
+</script>
+
+</body>
+</html>

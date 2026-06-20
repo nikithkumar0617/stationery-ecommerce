@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Track Order</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f5f5f5;
+    padding:40px;
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    max-width:700px;
+}
+
+.step{
+    padding:12px;
+    margin:10px 0;
+    border-radius:6px;
+    background:#ddd;
+}
+
+.active{
+    background:#27ae60;
+    color:white;
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="trackContainer">
+
+Loading Order...
+
+</div>
+
+<script>
+
+const supabaseClient =
+supabase.createClient(
+    "https://bojfqifnbwhavmcrxmkg.supabase.co",
+    "sb_publishable_3AIqLVymxDF06OsewH_Byg_V_YZ0atI"
+);
+
+const params =
+new URLSearchParams(
+    window.location.search
+);
+
+const orderId =
+params.get("id");
+
+loadOrder();
+
+async function loadOrder(){
+
+    const { data: order } =
+    await supabaseClient
+    .from("orders")
+    .select("*")
+    .eq("id", orderId)
+    .single();
+
+    const status =
+    order.status.toLowerCase();
+
+    let pending = "";
+    let confirmed = "";
+    let shipped = "";
+    let delivered = "";
+
+    if(
+        status === "pending"
+    ){
+        pending = "active";
+    }
+
+    if(
+        status === "confirmed"
+    ){
+        pending = "active";
+        confirmed = "active";
+    }
+
+    if(
+        status === "shipped"
+    ){
+        pending = "active";
+        confirmed = "active";
+        shipped = "active";
+    }
+
+    if(
+        status === "delivered"
+    ){
+        pending = "active";
+        confirmed = "active";
+        shipped = "active";
+        delivered = "active";
+    }
+
+    document
+    .getElementById(
+        "trackContainer"
+    )
+    .innerHTML = `
+
+    <div class="card">
+
+        <h2>
+            ${order.order_number}
+        </h2>
+
+        <p>
+            Current Status :
+            <b>${order.status}</b>
+        </p>
+
+        <div class="step ${pending}">
+            Pending
+        </div>
+
+        <div class="step ${confirmed}">
+            Confirmed
+        </div>
+
+        <div class="step ${shipped}">
+            Shipped
+        </div>
+
+        <div class="step ${delivered}">
+            Delivered
+        </div>
+
+    </div>
+
+    `;
+
+}
+
+</script>
+
+</body>
+</html>

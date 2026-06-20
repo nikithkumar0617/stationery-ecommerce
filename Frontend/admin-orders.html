@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Orders</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    padding:30px;
+    background:#f5f5f5;
+}
+
+.order-card{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+}
+
+.pending{
+    color:orange;
+}
+
+.confirmed{
+    color:green;
+}
+
+.cancelled{
+    color:red;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Admin Orders Dashboard</h1>
+
+<div id="ordersContainer">
+Loading Orders...
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+
+const supabaseClient =
+supabase.createClient(
+"https://bojfqifnbwhavmcrxmkg.supabase.co",
+"sb_publishable_3AIqLVymxDF06OsewH_Byg_V_YZ0atI"
+);
+
+loadOrders();
+
+async function updateStatus(
+    orderId,
+    newStatus
+){
+
+    const {
+        error
+    } = await supabaseClient
+    .from("orders")
+    .update({
+        status: newStatus
+    })
+    .eq(
+        "id",
+        orderId
+    );
+
+    if(error){
+
+        alert(
+            error.message
+        );
+
+        return;
+    }
+
+    alert(
+        "Status Updated"
+    );
+
+}
+
+async function loadOrders(){
+
+    const {
+
+        data: orders,
+        error
+
+    } =
+    await supabaseClient
+    .from("orders")
+    .select("*")
+    .order(
+        "placed_at",
+        {
+            ascending:false
+        }
+    );
+
+    console.log(orders);
+
+    const container =
+    document.getElementById(
+        "ordersContainer"
+    );
+
+    container.innerHTML = "";
+
+    orders.forEach(order => {
+
+        container.innerHTML += `
+
+        <div class="order-card">
+
+            <h3>
+                ${order.order_number}
+            </h3>
+
+            <p>
+                Customer :
+                ${order.shipping_name}
+            </p>
+
+            <p>
+                Phone :
+                ${order.shipping_phone}
+            </p>
+
+            <p>
+                Address :
+                ${order.shipping_address}
+            </p>
+
+            <p>
+                Total :
+                ₹${order.total_amount}
+            </p>
+
+            <p>
+Status :
+
+<select
+onchange="
+updateStatus(
+'${order.id}',
+this.value
+)"
+>
+
+<option
+value='pending'
+${order.status === 'pending' ? 'selected' : ''}
+>
+Pending
+</option>
+
+<option
+value='confirmed'
+${order.status === 'confirmed' ? 'selected' : ''}
+>
+Confirmed
+</option>
+
+<option
+value='shipped'
+${order.status === 'shipped' ? 'selected' : ''}
+>
+Shipped
+</option>
+
+<option
+value='delivered'
+${order.status === 'delivered' ? 'selected' : ''}
+>
+Delivered
+</option>
+
+<option
+value='cancelled'
+${order.status === 'cancelled' ? 'selected' : ''}
+>
+Cancelled
+</option>
+
+</select>
+
+</p>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
+
+
