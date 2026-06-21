@@ -184,12 +184,15 @@
 
   /* ---- Gallery ---- */
   .gallery-main {
+    position:relative; overflow: hidden;
+
     background: linear-gradient(135deg, var(--gray-100), var(--gray-50));
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     aspect-ratio: 1 / 1;
     display: flex; align-items: center; justify-content: center;
     overflow: hidden; position: relative; margin-bottom: 14px;
+    
   }
   .gallery-main img {
     width: 100%; height: 100%; object-fit: contain; padding: 28px;
@@ -204,12 +207,12 @@
   .gallery-badge.discount { background: linear-gradient(135deg, var(--color-danger), #A93226); }
   .gallery-badge.out-of-stock { background: linear-gradient(135deg, var(--gray-700), var(--gray-900)); }
   .gallery-wishlist {
-    position: absolute; top: 16px; right: 16px; width: 42px; height: 42px;
+    position: absolute; top: 16px; right: 16px; z-index:9999;
     background: var(--bg-surface); border: 1.5px solid var(--border-color); border-radius: 50%;
     display: flex; align-items: center; justify-content: center; font-size: 18px;
     color: var(--text-muted); transition: var(--transition-bounce); box-shadow: var(--shadow-xs);
   }
-  .gallery-wishlist:hover { color: #E53935; border-color: #E53935; background: #FFEBEE; transform: scale(1.1); }
+  .gallery-wishlist:hover { color: #E53935; border-color: #E53935; background: #FFEBEE; transform: scale(1.1); overflow:hidden; }
   .gallery-wishlist.active { color: #E53935; border-color: #E53935; background: #FFEBEE; }
   .gallery-thumbs { display: flex; gap: 10px; flex-wrap: wrap; }
   .gallery-thumb {
@@ -366,22 +369,32 @@
 
 <!-- ===== HEADER / NAV ===== -->
 <header id="site-header">
-  <div class="navbar-inner">
-    <a href="index.html" class="lm-logo">LaLa's<span>Mart</span></a>
-    <nav class="breadcrumb-trail" aria-label="Breadcrumb">
-      <a href="index.html">Home</a>
-      <span class="sep">/</span>
-      <a href="index.html#featured-categories" id="breadcrumb-category">Products</a>
-      <span class="sep">/</span>
-      <span class="current" id="breadcrumb-current">Product</span>
-    </nav>
-    <div class="nav-icons">
-      <a href="#" class="icon-btn" aria-label="Wishlist"><i class="bi bi-heart"></i></a>
-      <a href="#" class="icon-btn" aria-label="Shopping cart">
-        <i class="bi bi-bag"></i>
-        <span class="icon-badge" id="cart-count">0</span>
-      </a>
-    </div>
+  <div class="nav-icons">
+
+    <a
+      href="wishlist.html"
+      class="icon-btn"
+      aria-label="Wishlist"
+    >
+      <i class="bi bi-heart"></i>
+    </a>
+
+    <a
+      href="cart.html"
+      class="icon-btn"
+      aria-label="Shopping cart"
+  >
+      <i class="bi bi-bag"></i>
+
+      <span
+          class="icon-badge"
+          id="cart-count"
+      >
+          0
+      </span>
+
+    </a>
+
   </div>
 </header>
 
@@ -798,9 +811,18 @@
     document.title = (product.name || "Product") + " | LaLa's Mart";
 
     // Breadcrumb
-    $breadcrumbCurrent.textContent = product.name || "Product";
-    if (categoryName) {
-      $breadcrumbCategory.textContent = categoryName;
+
+    if ($breadcrumbCurrent) {
+        $breadcrumbCurrent.textContent =
+        product.name || "Product";
+    }
+
+    if (
+        categoryName &&
+        $breadcrumbCategory
+    ) {
+        $breadcrumbCategory.textContent =
+        categoryName;
     }
 
     // Rating

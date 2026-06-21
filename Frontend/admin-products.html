@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Products</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fb;
+    margin:0;
+}
+
+.admin-header{
+    background:#111633;
+    color:white;
+    padding:20px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:32px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#ff5a2c;
+}
+
+.container{
+    padding:30px;
+}
+
+.page-title{
+    font-size:34px;
+    margin-bottom:25px;
+    color:#111633;
+}
+
+.table-card{
+    background:white;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#111633;
+    color:white;
+}
+
+th{
+    padding:18px;
+    text-align:left;
+}
+
+td{
+    padding:16px 18px;
+    border-bottom:1px solid #eee;
+}
+
+tr:hover{
+    background:#fafafa;
+}
+
+.delete-btn{
+    background:#ff4d4d;
+    color:white;
+    border:none;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.delete-btn:hover{
+    opacity:.9;
+}
+
+.stock-badge{
+    background:#e8fff0;
+    color:#0b8a43;
+    padding:6px 12px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="admin-header">
+
+    <div class="logo">
+        LaLa's<span>Mart</span>
+    </div>
+
+    <div>
+        Admin Panel
+    </div>
+
+</div>
+
+<div class="container">
+
+    <h1 class="page-title">
+        Product Management
+    </h1>
+
+    <p id="productCount"></p>
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="productsBody">
+
+                <tr>
+                    <td colspan="4">
+                        Loading products...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+const supabaseClient =
+supabase.createClient(
+"https://bojfqifnbwhavmcrxmkg.supabase.co",
+"sb_publishable_3AIqLVymxDF06OsewH_Byg_V_YZ0atI"
+);
+
+loadProducts();
+
+async function loadProducts(){
+
+const { data, error } =
+await supabaseClient
+.from("products")
+.select("*");
+
+if(error){
+
+    console.error(error);
+    return;
+
+}
+
+const body =
+document.getElementById(
+"productsBody"
+);
+
+body.innerHTML="";
+
+data.forEach(product=>{
+
+body.innerHTML += `
+
+<tr>
+
+<td>${product.name}</td>
+
+<td>₹${product.price}</td>
+
+<td>
+
+<span class="stock-badge">
+
+${product.stock_qty}
+
+</span>
+
+</td>
+
+<td>
+
+<button
+class="delete-btn"
+onclick="deleteProduct('${product.id}')">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+async function deleteProduct(id){
+
+await supabaseClient
+.from("products")
+.delete()
+.eq("id",id);
+
+loadProducts();
+
+document.getElementById(
+    "productCount"
+).textContent =
+`${data.length} Products Found`;
+
+}
+
+</script>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

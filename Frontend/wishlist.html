@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Wishlist</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+    <style>
+        body{
+            font-family:Arial;
+            padding:30px;
+            background:#f5f5f5;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin-bottom:15px;
+            border-radius:10px;
+        }
+
+        button{
+            background:red;
+            color:white;
+            border:none;
+            padding:8px 15px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>❤️ My Wishlist</h1>
+
+<div id="wishlistContainer">
+Loading...
+</div>
+
+<script>
+
+    const supabaseClient =
+    supabase.createClient(
+    "https://bojfqifnbwhavmcrxmkg.supabase.co",
+    "sb_publishable_3AIqLVymxDF06OsewH_Byg_V_YZ0atI"
+    );
+
+loadWishlist();
+
+async function loadWishlist(){
+
+    const wishlist =
+    JSON.parse(
+        localStorage.getItem(
+            "lalasmart_wishlist"
+        )
+    ) || [];
+
+    const container =
+    document.getElementById(
+        "wishlistContainer"
+    );
+
+    if(wishlist.length===0){
+
+        container.innerHTML =
+        "<h3>No Wishlist Items</h3>";
+
+        return;
+    }
+
+    container.innerHTML = "";
+
+    for(const productId of wishlist){
+
+        const {
+            data: product
+        } =
+        await supabaseClient
+        .from("products")
+        .select("*")
+        .eq("id", productId)
+        .single();
+
+        if(!product) continue;
+
+        let imageUrl =
+        "https://via.placeholder.com/200";
+
+        if(product.images){
+
+            try{
+
+                const imgs =
+                typeof product.images === "string"
+                ? JSON.parse(product.images)
+                : product.images;
+
+                if(
+                    Array.isArray(imgs) &&
+                    imgs.length > 0
+                ){
+                    imageUrl =
+                    imgs[0].url || imgs[0];
+                }
+
+            }catch(e){}
+        }
+
+        container.innerHTML += `
+
+        <div class="card">
+
+            <img
+                src="${imageUrl}"
+                width="150"
+            >
+
+            <h3>
+                ${product.name}
+            </h3>
+
+            <p>
+                ₹${product.price}
+            </p>
+
+            <a href="product.html?id=${product.id}">
+                View Product
+            </a>
+
+            <br><br>
+
+            <button
+            onclick="removeWishlist('${product.id}')">
+
+                Remove
+
+            </button>
+
+        </div>
+
+        `;
+    }
+}
+
+function removeWishlist(id){
+
+    let wishlist =
+    JSON.parse(
+        localStorage.getItem(
+            "lalasmart_wishlist"
+        )
+    ) || [];
+
+    wishlist =
+    wishlist.filter(
+        x => x !== id
+    );
+
+    localStorage.setItem(
+        "lalasmart_wishlist",
+        JSON.stringify(wishlist)
+    );
+
+    loadWishlist();
+
+}
+
+</script>
+
+</body>
+</html>
