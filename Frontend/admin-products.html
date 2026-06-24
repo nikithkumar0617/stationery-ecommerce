@@ -68,7 +68,7 @@ td{
     border-bottom:1px solid #eee;
 }
 
-tr:hover{
+tbody tr:hover{
     background:#fafafa;
 }
 
@@ -85,12 +85,33 @@ tr:hover{
     opacity:.9;
 }
 
+.edit-btn{
+
+    background:#02126b;
+    color:white;
+    border:none;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-right:8px;
+
+}
+
+.edit-btn:hover{
+    opacity:.9;
+}
+
 .stock-badge{
     background:#e8fff0;
     color:#0b8a43;
     padding:6px 12px;
     border-radius:20px;
     font-weight:bold;
+}
+
+.low-stock{
+    background:#ffe5e5;
+    color:#d62828;
 }
 
 </style>
@@ -113,9 +134,34 @@ tr:hover{
 
 <div class="container">
 
-    <h1 class="page-title">
-        Product Management
-    </h1>
+    <div
+    style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    ">
+
+        <h1 class="page-title">
+            Product Management
+        </h1>
+
+        <button
+        onclick="window.location.href='admin-add-product.html'"
+        style="
+            background:#ff5a2c;
+            color:white;
+            border:none;
+            padding:12px 20px;
+            border-radius:10px;
+            cursor:pointer;
+            font-size:16px;
+            font-weight:bold;
+        ">
+            + Add Product
+        </button>
+
+    </div>
 
     <p id="productCount"></p>
 
@@ -127,6 +173,7 @@ tr:hover{
 
                 <tr>
                     <th>Name</th>
+                    <th>Brand</th>
                     <th>Price</th>
                     <th>Stock</th>
                     <th>Action</th>
@@ -183,25 +230,47 @@ body.innerHTML="";
 
 data.forEach(product=>{
 
+    document.getElementById(
+        "productCount"
+    ).textContent =
+    `${data.length} Products Found`;
+
 body.innerHTML += `
 
 <tr>
 
 <td>${product.name}</td>
 
-<td>₹${product.price}</td>
+<td>${product.brand}</td>
 
 <td>
 
-<span class="stock-badge">
+₹${product.discount_price || product.price}
 
+</td>
+
+<td>
+
+<span
+class="
+stock-badge
+${product.stock_qty < 50 ? 'low-stock' : ''}
+"
+>
 ${product.stock_qty}
-
 </span>
 
 </td>
 
 <td>
+
+<button
+class="edit-btn"
+onclick="editProduct('${product.id}')">
+
+Edit
+
+</button>
 
 <button
 class="delete-btn"
@@ -223,17 +292,27 @@ Delete
 
 async function deleteProduct(id){
 
+const confirmDelete =
+confirm(
+"Delete this product?"
+);
+
+if(!confirmDelete){
+return;
+}
+
 await supabaseClient
 .from("products")
 .delete()
 .eq("id",id);
 
 loadProducts();
+}
 
-document.getElementById(
-    "productCount"
-).textContent =
-`${data.length} Products Found`;
+function editProduct(id){
+
+    window.location.href =
+    `admin-edit-product.html?id=${id}`;
 
 }
 

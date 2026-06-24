@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Add Product - LaLa's Mart</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fb;
+    margin:0;
+}
+
+.header{
+    background:#111633;
+    color:white;
+    padding:20px 40px;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.header span{
+    color:#ff5a2c;
+}
+
+.container{
+    max-width:800px;
+    margin:40px auto;
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+h1{
+    margin-bottom:25px;
+}
+
+input,
+textarea{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    box-sizing:border-box;
+}
+
+button{
+    background:#ff5a2c;
+    color:white;
+    border:none;
+    padding:14px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+#toast{
+    position:fixed;
+    top:20px;
+    right:20px;
+    background:#111633;
+    color:white;
+    padding:14px 20px;
+    border-radius:10px;
+    display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+    LaLa's<span>Mart</span>
+</div>
+
+<div class="container">
+
+<h1>Add New Product</h1>
+
+<input id="name" placeholder="Product Name">
+
+<input id="brand" placeholder="Brand">
+
+<input id="sku" placeholder="SKU">
+
+<input id="price" placeholder="Price">
+
+<input id="discount_price" placeholder="Discount Price">
+
+<input id="stock_qty" placeholder="Stock Quantity">
+
+<select id="category_id">
+
+<option value="">Select Category</option>
+
+<option value="6">
+Ballpoint Pens
+</option>
+
+<option value="7">
+Fountain Pens
+</option>
+
+<option value="8">
+Highlighters
+</option>
+
+<option value="9">
+Spiral Notebooks
+</option>
+
+<option value="10">
+Hardcover Diaries
+</option>
+
+</select>
+
+<input id="image" placeholder="Image URL">
+
+<textarea
+id="description"
+placeholder="Description">
+</textarea>
+
+<button onclick="saveProduct()">
+Save Product
+</button>
+
+</div>
+
+<div id="toast">
+    Product Added Successfully
+</div>
+
+<script>
+
+const supabaseClient =
+supabase.createClient(
+"https://bojfqifnbwhavmcrxmkg.supabase.co",
+"sb_publishable_3AIqLVymxDF06OsewH_Byg_V_YZ0atI"
+);
+
+async function saveProduct(){
+
+    const product = {
+
+        name:
+        document.getElementById("name").value,
+
+        slug:
+        name
+        .toLowerCase()
+        .replaceAll(" ","-"),
+
+        brand:
+        document.getElementById("brand").value,
+
+        sku:
+        document.getElementById("sku").value,
+
+        price:
+        Number(
+            document.getElementById("price").value
+        ),
+
+        discount_price:
+        Number(
+            document.getElementById("discount_price").value
+        ),
+
+        stock_qty:
+        Number(
+            document.getElementById("stock_qty").value
+        ),
+
+        category_id:
+        Number(
+        document.getElementById(
+        "category_id"
+        ).value
+        ),
+
+        description:
+        document.getElementById("description").value,
+
+        images:
+        document.getElementById("image").value,
+
+        is_active:true
+
+    };
+
+    const { error } =
+    await supabaseClient
+    .from("products")
+    .insert([product]);
+
+    if(error){
+
+        alert(error.message);
+        return;
+
+    }
+
+    showToast("Product Added Successfully");
+
+    window.location.href =
+    "admin-products.html";
+
+}
+
+function showToast(message){
+
+    const toast =
+    document.getElementById("toast");
+
+    toast.innerText = message;
+
+    toast.style.display = "block";
+
+    setTimeout(()=>{
+
+        toast.style.display = "none";
+
+    },3000);
+}
+
+</script>
+
+</body>
+</html>

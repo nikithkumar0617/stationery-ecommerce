@@ -54,7 +54,8 @@ async function loadProducts() {
                             width:100%;
                             height:100%;
                             display:block;
-                            object-fit:cover;
+                            object-fit:contain;
+                            padding:10px;
                         "
                     >
                 </div>
@@ -263,7 +264,7 @@ if(savedUser){
     .style.display = "none";
 
     document.getElementById("loginBtn")
-    .innerText = savedUser;
+    .innerHTML = `<i class="bi bi-person"></i> My Account`;
 
     document.getElementById("registerBtn")
     .innerText = "Logout";

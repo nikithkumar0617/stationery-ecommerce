@@ -207,6 +207,32 @@ async function placeOrder(){
 
         console.log(data);
         console.log(error);
+
+        const {
+    data: productData,
+    error: stockError
+}
+=
+await supabaseClient
+.from("products")
+.select("stock_qty")
+.eq("id", item.id)
+.single();
+
+if(!stockError && productData){
+
+    const newStock =
+    productData.stock_qty -
+    (item.quantity || 1);
+
+    await supabaseClient
+    .from("products")
+    .update({
+        stock_qty: newStock
+    })
+    .eq("id", item.id);
+
+}
     }
 
     localStorage.removeItem(

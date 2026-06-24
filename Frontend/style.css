@@ -473,6 +473,10 @@
     }
     .product-card:hover { border-color: var(--lm-primary); box-shadow: var(--shadow-hover); transform: translateY(-3px); }
     .product-img-wrap {
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      padding:10px;
       background: var(--lm-bg);
       height: 200px;
       display: flex;

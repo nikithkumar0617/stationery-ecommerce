@@ -5,29 +5,139 @@
 
 <style>
 
+.order-items{
+    margin-top:15px;
+    margin-bottom:15px;
+    padding:15px;
+    background:#f8fafc;
+    border-radius:10px;
+}
+
+.order-items h4{
+    margin:0 0 10px;
+    color:#111633;
+}
+
+.order-items p{
+    margin:5px 0;
+    color:#555;
+}
+
 body{
-    font-family:Arial;
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#eef2ff;
+}
+
+.header{
+    background:linear-gradient(
+        135deg,
+        #111633,
+        #080269
+    );
+    color:white;
+    padding:20px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:32px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#ff5a2c;
+}
+
+.nav-links{
+    display:flex;
+    gap:25px;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
     padding:30px;
-    background:#f5f5f5;
+}
+
+.page-title{
+    margin-bottom:25px;
 }
 
 .order-card{
     background:white;
-    padding:20px;
+    border-radius:16px;
+    padding:25px;
     margin-bottom:20px;
-    border-radius:10px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    border-left:6px solid #ff5a2c;
+    transition:.3s;
 }
 
-.pending{
-    color:orange;
+.order-card:hover{
+    transform:translateY(-3px);
 }
 
-.confirmed{
-    color:green;
+.order-number{
+    color:#111633;
+    margin-bottom:15px;
 }
 
-.cancelled{
-    color:red;
+.order-info{
+    line-height:1.8;
+    color:#555;
+}
+
+.order-total{
+    font-size:22px;
+    font-weight:bold;
+    color:#ff5a2c;
+    margin:15px 0;
+}
+
+.status-select{
+    padding:10px 18px;
+    border:none;
+    outline:none;
+    border-radius:30px;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:14px;
+    min-width:140px;
+    transition:.3s;
+}
+
+.pending-status{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.confirmed-status{
+    background:#d4edda;
+    color:#155724;
+}
+
+.shipped-status{
+    background:#cfe2ff;
+    color:#084298;
+}
+
+.delivered-status{
+    background:#d1e7dd;
+    color:#0f5132;
+}
+
+.cancelled-status{
+    background:#f8d7da;
+    color:#842029;
 }
 
 </style>
@@ -38,13 +148,66 @@ body{
 
 <h1>Admin Orders Dashboard</h1>
 
-<div id="ordersContainer">
-Loading Orders...
+<div class="header">
+
+    <div class="logo">
+        LaLa's<span>Mart</span>
+    </div>
+
+    <div class="nav-links">
+
+        <a href="admin-dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="admin-products.html">
+            Products
+        </a>
+
+        <a href="admin-orders.html">
+            Orders
+        </a>
+
+    </div>
+
+</div>
+
+<div class="container">
+
+    <h1 class="page-title">
+        Orders Management
+    </h1>
+
+<div style="
+margin-bottom:20px;
+">
+
+<input
+id="searchOrders"
+type="text"
+placeholder="Search by Order Number or Customer Name..."
+style="
+width:100%;
+padding:14px;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:16px;
+"
+/>
+
+</div>
+
+    <div id="ordersContainer">
+        Loading Orders...
+    </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
+
+    let allOrders = [];
 
 const supabaseClient =
 supabase.createClient(
@@ -54,9 +217,17 @@ supabase.createClient(
 
 loadOrders();
 
+document
+.getElementById("searchOrders")
+.addEventListener(
+    "input",
+    filterOrders
+);
+
 async function updateStatus(
     orderId,
-    newStatus
+    newStatus,
+    selectElement
 ){
 
     const {
@@ -80,23 +251,65 @@ async function updateStatus(
         return;
     }
 
-    alert(
+    console.log(
         "Status Updated"
     );
+
+    selectElement.className =
+    "status-select " +
+    newStatus +
+    "-status";
+
+    loadOrders();
+
+    
+
+}
+
+function filterOrders(){
+
+    const searchText =
+    document
+    .getElementById("searchOrders")
+    .value
+    .toLowerCase();
+
+    const filteredOrders =
+    allOrders.filter(order =>
+
+        order.order_number
+        .toLowerCase()
+        .includes(searchText)
+
+        ||
+
+        order.shipping_name
+        .toLowerCase()
+        .includes(searchText)
+
+    );
+
+    renderOrders(filteredOrders);
 
 }
 
 async function loadOrders(){
 
     const {
-
         data: orders,
         error
-
-    } =
+    }
+    =
     await supabaseClient
     .from("orders")
-    .select("*")
+    .select(`
+        *,
+        order_items (
+            product_name,
+            quantity,
+            line_total
+        )
+    `)
     .order(
         "placed_at",
         {
@@ -104,7 +317,20 @@ async function loadOrders(){
         }
     );
 
-    console.log(orders);
+    if(error){
+
+        console.error(error);
+    
+        return;
+    }
+
+    allOrders = orders;
+
+    renderOrders(orders);
+
+}
+
+function renderOrders(orders){
 
     const container =
     document.getElementById(
@@ -115,83 +341,119 @@ async function loadOrders(){
 
     orders.forEach(order => {
 
+        let statusClass = "";
+
+        if(order.status === "pending"){
+            statusClass = "pending-status";
+        }
+        else if(order.status === "confirmed"){
+            statusClass = "confirmed-status";
+        }
+        else if(order.status === "shipped"){
+            statusClass = "shipped-status";
+        }
+        else if(order.status === "delivered"){
+            statusClass = "delivered-status";
+        }
+        else if(order.status === "cancelled"){
+            statusClass = "cancelled-status";
+        }
+
         container.innerHTML += `
 
         <div class="order-card">
 
-            <h3>
+            <h2 class="order-number">
                 ${order.order_number}
-            </h3>
+            </h2>
 
-            <p>
-                Customer :
+            <div class="order-info">
+
+                <strong>Customer:</strong>
                 ${order.shipping_name}
-            </p>
+                <br>
 
-            <p>
-                Phone :
+                <strong>Phone:</strong>
                 ${order.shipping_phone}
-            </p>
+                <br>
 
-            <p>
-                Address :
+                <strong>Address:</strong>
                 ${order.shipping_address}
-            </p>
 
-            <p>
-                Total :
+            </div>
+
+            <div class="order-total">
                 ₹${order.total_amount}
-            </p>
+            </div>
 
-            <p>
-Status :
+            <div class="order-items">
 
-<select
-onchange="
-updateStatus(
-'${order.id}',
-this.value
-)"
->
+                <h4>Items Ordered</h4>
 
-<option
-value='pending'
-${order.status === 'pending' ? 'selected' : ''}
->
-Pending
-</option>
+                ${
+                order.order_items
+                .map(item => `
+                <p>
+                • ${item.product_name}
+                (x${item.quantity})
+                </p>
+                `)
+                .join("")
+                }
 
-<option
-value='confirmed'
-${order.status === 'confirmed' ? 'selected' : ''}
->
-Confirmed
-</option>
+            </div>
 
-<option
-value='shipped'
-${order.status === 'shipped' ? 'selected' : ''}
->
-Shipped
-</option>
+            <label>
+                <strong>Status:</strong>
+            </label>
 
-<option
-value='delivered'
-${order.status === 'delivered' ? 'selected' : ''}
->
-Delivered
-</option>
+            <br><br>
 
-<option
-value='cancelled'
-${order.status === 'cancelled' ? 'selected' : ''}
->
-Cancelled
-</option>
+            <select
+            class="status-select ${statusClass}"
+            onchange="
+            updateStatus(
+            '${order.id}',
+            this.value,
+            this
+            )">
 
-</select>
+                <option
+                value='pending'
+                ${order.status === 'pending' ? 'selected' : ''}
+                >
+                Pending
+                </option>
 
-</p>
+                <option
+                value='confirmed'
+                ${order.status === 'confirmed' ? 'selected' : ''}
+                >
+                Confirmed
+                </option>
+
+                <option
+                value='shipped'
+                ${order.status === 'shipped' ? 'selected' : ''}
+                >
+                Shipped
+                </option>
+
+                <option
+                value='delivered'
+                ${order.status === 'delivered' ? 'selected' : ''}
+                >
+                Delivered
+                </option>
+
+                <option
+                value='cancelled'
+                ${order.status === 'cancelled' ? 'selected' : ''}
+                >
+                Cancelled
+                </option>
+
+            </select>
 
         </div>
 

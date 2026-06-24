@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Admin Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#eef2ff;
+}
+
+.header{
+    background:linear-gradient(
+        135deg,
+        #111633,
+        #080269
+    );
+    color:white;
+    padding:20px 40px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:32px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#ff5a2c;
+}
+
+.nav-links{
+    display:flex;
+    gap:25px;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.nav-links a:hover{
+    color:#ff5a2c;
+}
+
+.container{
+    padding:30px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:rgb(255, 255, 255);
+    border-left:5px solid #f5881b;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.08);
+}
+
+.card{
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:
+    0 20px 40px rgba(0,0,0,.12);
+}
+.card h3{
+    margin:0;
+    color:#5c6470;
+    font-weight:600;
+}
+
+.card h1{
+    margin-top:10px;
+    color:#ff5a2c;
+    font-size:28px;
+}
+
+.low-stock-card{
+
+    border-left:
+    5px solid #ff5a2c;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="logo">
+LaLa's<span>Mart</span>
+</div>
+
+<div class="nav-links">
+
+        <a href="admin-dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="admin-products.html">
+            Products
+        </a>
+
+        <a href="admin-orders.html">
+            Orders
+        </a>
+
+</div>
+
+</div>
+
+<div class="container">
+
+<h1>Admin Dashboard</h1>
+
+<div class="cards">
+    
+    <div class="card">
+    <h3>Completed Orders</h3>
+    <h1 id="completedCount">0</h1>
+</div>
+
+<div class="card">
+<h3>Total Products</h3>
+<h1 id="productsCount">0</h1>
+</div>
+
+<div class="card">
+<h3>Total Orders</h3>
+<h1 id="ordersCount">0</h1>
+</div>
+
+<div class="card">
+<h3>Total Revenue</h3>
+<h1 id="revenue">₹0</h1>
+</div>
+
+<div class="card">
+<h3>Pending Orders</h3>
+<h1 id="pendingCount">0</h1>
+</div>
+
+<div class="card low-stock-card">
+    
+    <h3>
+        Low Stock Products
+    </h3>
+
+    <h1 id="lowStockCount">
+        0
+    </h1>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const supabaseClient =
+supabase.createClient(
+"https://bojfqifnbwhavmcrxmkg.supabase.co",
+"sb_publishable_3AIqLVymxDF06OsewH_Byg_V_YZ0atI"
+);
+
+loadDashboard();
+
+async function loadDashboard(){
+
+const {data:products}
+=
+await supabaseClient
+.from("products")
+.select("*");
+
+const lowStockProducts =
+products.filter(
+    p => p.stock_qty <= 50
+);
+
+document.getElementById(
+"productsCount"
+).textContent =
+products.length;
+
+const {data:orders}
+=
+await supabaseClient
+.from("orders")
+.select("*");
+
+document.getElementById(
+"ordersCount"
+).textContent =
+orders.length;
+
+let revenue = 0;
+
+orders.forEach(order=>{
+
+revenue +=
+Number(order.total_amount || 0);
+
+});
+
+document.getElementById(
+"revenue"
+).textContent =
+"₹" + revenue;
+
+const pending =
+orders.filter(
+o => o.status === "pending"
+);
+
+const completed =
+orders.filter(
+o => o.status === "delivered"
+);
+
+document.getElementById(
+"completedCount"
+).textContent =
+completed.length;
+
+document.getElementById(
+"pendingCount"
+).textContent =
+pending.length;
+
+document.getElementById(
+"lowStockCount"
+).textContent =
+lowStockProducts.length;
+
+}
+
+</script>
+
+</body>
+</html>

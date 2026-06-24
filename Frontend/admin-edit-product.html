@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    
+
+<title>Edit Product</title>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f7fb;
+}
+
+.header{
+background:linear-gradient(
+        135deg,
+        #111633,
+        #080269
+    );
+color:white;
+padding:20px 40px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+    font-size:32px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#ff5a2c;
+}
+
+.container{
+    max-width:900px;
+    margin:40px auto;
+}
+
+.card h1{
+    font-size:42px;
+    font-weight:800;
+    color:#111633;
+    margin-bottom:35px;
+    position:relative;
+}
+
+.card h1::after{
+    content:"";
+    width:70px;
+    height:4px;
+    background:#ff5a2c;
+    position:absolute;
+    left:0;
+    bottom:-10px;
+    border-radius:20px;
+}
+
+input,
+textarea{
+
+    width:100%;
+    padding:16px 18px;
+
+    margin-bottom:18px;
+
+    border:2px solid #e6eaf2;
+    border-radius:12px;
+
+    box-sizing:border-box;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+input:focus,
+textarea:focus{
+
+    outline:none;
+
+    border-color:#ff5a2c;
+
+    box-shadow:
+    0 0 0 4px
+    rgba(255,90,44,.12);
+
+}
+
+button{
+
+background:linear-gradient(
+135deg,
+#ff5a2c,
+#ff784e
+);
+
+color:white;
+
+border:none;
+
+padding:16px 32px;
+
+border-radius:12px;
+
+font-size:16px;
+font-weight:700;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+button:hover{
+
+transform:translateY(-3px);
+
+box-shadow:
+0 15px 30px
+rgba(255,90,44,.25);
+
+}
+
+.nav-links{
+display:flex;
+gap:25px;
+}
+
+.nav-links a{
+color:white;
+text-decoration:none;
+font-weight:bold;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    margin-top:12px;
+
+    font-size:15px;
+    font-weight:700;
+
+    color:#111633;
+    letter-spacing:.3px;
+}
+
+.image-section{
+    margin-top:10px;
+    margin-bottom:25px;
+}
+
+#previewImage{
+
+    width:220px;
+    height:220px;
+
+    object-fit:contain;
+
+    border-radius:16px;
+
+    border:3px solid #f1f3f9;
+
+    padding:5px;
+
+    background:white;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.08);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="logo">
+LaLa's<span>Mart</span>
+</div>
+
+<div class="nav-links">
+
+        <a href="admin-dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="admin-products.html">
+            Products
+        </a>
+
+        <a href="admin-orders.html">
+            Orders
+        </a>
+
+</div>
+
+</div>
+
+
+<div class="container">
+
+    <button
+onclick="window.location.href='admin-products.html'"
+style="
+background:#111633;
+margin-bottom:20px;
+">
+← Back To Products
+</button>
+
+<div class="card">
+
+<h1>Edit Product</h1>
+
+<label>Product Name</label>
+<input id="name">
+
+<label>Brand</label>
+<input id="brand">
+
+<label>Price</label>
+<input id="price">
+
+<label>Stock</label>
+<input id="stock">
+
+<label>Image URL</label>
+<input id="image">
+
+<div class="image-section">
+
+<img
+id="previewImage"
+style="
+width:220px;
+height:220px;
+
+object-fit:contain;
+
+border-radius:16px;
+
+border:3px solid #f1f3f9;
+
+padding:5px;
+
+background:white;
+
+box-shadow:
+0 10px 25px rgba(0,0,0,.08);
+
+"
+/>
+
+</div>
+
+<label>Description</label>
+<textarea
+id="description"
+rows="5">
+</textarea>
+
+<button onclick="updateProduct()">
+Update Product
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const supabaseClient =
+supabase.createClient(
+"https://bojfqifnbwhavmcrxmkg.supabase.co",
+"sb_publishable_3AIqLVymxDF06OsewH_Byg_V_YZ0atI"
+);
+
+const productId =
+new URLSearchParams(
+window.location.search
+).get("id");
+
+loadProduct();
+
+document
+.getElementById("image")
+.addEventListener(
+    "input",
+    function(){
+
+        document
+        .getElementById(
+            "previewImage"
+        )
+        .src = this.value;
+
+    }
+);
+
+async function loadProduct(){
+
+const { data }
+=
+await supabaseClient
+.from("products")
+.select("*")
+.eq("id", productId)
+.single();
+
+document.getElementById("name").value =
+data.name || "";
+
+document.getElementById("brand").value =
+data.brand || "";
+
+document.getElementById("price").value =
+data.price || "";
+
+document.getElementById("stock").value =
+data.stock_qty || "";
+
+document.getElementById("image").value =
+data.images?.[0]?.url || "";
+
+document.getElementById("description").value =
+data.description || "";
+
+document.getElementById("previewImage").src =
+data.images?.[0]?.url || "";
+
+}
+
+async function updateProduct(){
+
+    document.getElementById(
+        "previewImage"
+    ).src =
+    document.getElementById(
+        "image"
+    ).value;
+
+const { error } =
+await supabaseClient
+.from("products")
+.update({
+
+name:
+document.getElementById("name").value,
+
+brand:
+document.getElementById("brand").value,
+
+price:
+Number(
+document.getElementById("price").value
+),
+
+stock_qty:
+Number(
+document.getElementById("stock").value
+),
+
+images: [
+{
+alt:
+document.getElementById("name").value,
+
+url:
+document.getElementById("image").value
+}
+],
+
+description:
+document.getElementById("description").value
+
+})
+.eq(
+"id",
+productId
+);
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+alert(
+"Product Updated Successfully"
+);
+
+window.location.href =
+"admin-products.html";
+
+}
+
+</script>
+
+</body>
+</html>
