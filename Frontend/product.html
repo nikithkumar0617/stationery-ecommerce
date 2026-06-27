@@ -1024,11 +1024,17 @@
   });
 
   $buyNowBtn.addEventListener("click", () => {
+
+    showToast("Going To Checkout…");
+
     if (!currentProduct || $buyNowBtn.disabled) return;
-    const qty = Math.max(1, parseInt($qtyInput.value, 10) || 1);
+
+    const qty = Math.max(1, parseInt($qtyInput.value,10)||1);
+
     addToCart(currentProduct, qty);
-    // Redirect straight to checkout with this item already in the cart.
-    showToast("Checkout page coming soon");
+
+    window.location.href = "checkout.html";
+
   });
 
   /* ---------------------------------------------------------------

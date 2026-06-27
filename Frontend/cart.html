@@ -8,41 +8,295 @@
     <style>
 
         body{
-            font-family:Arial,sans-serif;
-            padding:40px;
-            background:#f5f5f5;
-        }
 
-        h1{
-            margin-bottom:30px;
-        }
+margin:0;
 
-        .cart-item{
-            background:white;
-            padding:20px;
-            margin-bottom:15px;
-            border-radius:10px;
-        }
+font-family:Arial,sans-serif;
 
-        .price{
-            color:green;
-            font-weight:bold;
-        }
+background:#f5f7fb;
 
-        button{
-            padding:8px 15px;
-            border:none;
-            background:#ff5722;
-            color:white;
-            cursor:pointer;
-            border-radius:5px;
-        }
+padding:40px;
 
-        #total{
-            margin-top:30px;
-            font-size:24px;
-            font-weight:bold;
-        }
+color:#111633;
+
+}
+
+.container{
+
+max-width:1400px;
+
+margin:auto;
+
+}
+
+h1{
+
+font-size:42px;
+
+margin-bottom:35px;
+
+}
+
+.cart-layout{
+
+display:grid;
+
+grid-template-columns:2fr 1fr;
+
+gap:35px;
+
+align-items:start;
+
+}
+
+.cart-item{
+
+display:flex;
+
+gap:20px;
+
+background:white;
+
+padding:20px;
+
+border-radius:18px;
+
+margin-bottom:20px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.product-image{
+
+width:160px;
+
+height:160px;
+
+flex-shrink:0;
+
+border-radius:14px;
+
+overflow:hidden;
+
+background:#fafafa;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+border:1px solid #eee;
+
+}
+
+.product-image img{
+
+width:100%;
+
+height:100%;
+
+object-fit:contain;
+
+}
+
+.product-details{
+
+flex:1;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+}
+
+.product-details h3{
+
+margin:0 0 8px;
+
+font-size:24px;
+
+}
+
+.brand{
+
+color:#777;
+
+margin-bottom:8px;
+
+text-transform:uppercase;
+
+font-size:13px;
+
+}
+
+.price{
+
+font-size:28px;
+
+font-weight:bold;
+
+color:#ff5a2c;
+
+margin:15px 0;
+
+}
+
+.qty-box{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+margin:18px 0;
+
+}
+
+.qty-box button{
+
+width:38px;
+
+height:38px;
+
+border:none;
+
+border-radius:8px;
+
+background:#ff5a2c;
+
+color:white;
+
+cursor:pointer;
+
+font-size:18px;
+
+}
+
+.remove-btn{
+
+background:#dc3545;
+color:white;
+border:none;
+padding:12px 18px;
+border-radius:10px;
+cursor:pointer;
+font-weight:600;
+transition:.3s;
+
+}
+
+.remove-btn:hover{
+
+background:#bb2d3b;
+
+}
+
+.summary{
+
+background:white;
+
+padding:25px;
+
+border-radius:18px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+position:sticky;
+
+top:30px;
+
+}
+
+#cartItems{
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.summary h2{
+
+margin-top:0;
+
+}
+
+.summary-row{
+
+display:flex;
+
+justify-content:space-between;
+
+margin:15px 0;
+
+}
+
+.checkout-btn{
+
+width:100%;
+
+padding:16px;
+
+margin-top:20px;
+
+border:none;
+
+background:#ff5a2c;
+
+color:white;
+
+font-size:18px;
+
+font-weight:bold;
+
+border-radius:12px;
+
+cursor:pointer;
+
+}
+
+.checkout-btn:hover{
+
+background:#f04b1c;
+
+}
+
+.empty-cart{
+
+text-align:center;
+
+background:white;
+
+padding:60px;
+
+border-radius:18px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.empty-cart h2{
+
+font-size:32px;
+
+margin-bottom:15px;
+
+}
+
+.empty-cart p{
+
+color:#666;
+
+margin-bottom:25px;
+
+}
 
     </style>
 
@@ -50,19 +304,59 @@
 
 <body>
 
+    <div class="container">
+
     <h1>Your Cart</h1>
+
+    <div class="cart-layout">
 
     <div id="cartItems"></div>
 
-    <div id="total"></div>
+    <div class="summary">
 
-    <br>
-    
-    <a href="checkout.html">
-        <button>
-            Proceed To Checkout
-        </button>
-    </a>
+<h2>Order Summary</h2>
+
+<div class="summary-row">
+
+<span>Subtotal</span>
+
+<strong id="subtotal"></strong>
+
+</div>
+
+<div class="summary-row">
+
+<span>Delivery</span>
+
+<strong>FREE</strong>
+
+</div>
+
+<hr>
+
+<div class="summary-row">
+
+<h2>Total</h2>
+
+<h2 id="total"></h2>
+
+</div>
+
+<a href="checkout.html">
+
+<button class="checkout-btn">
+
+Proceed To Checkout
+
+</button>
+
+</a>
+
+</div>
+
+    </div>
+
+    </div>
 
     <script>
 
@@ -73,6 +367,36 @@
 
         const container =
         document.getElementById("cartItems");
+
+        if(cart.length === 0){
+
+        container.innerHTML = `
+
+        <div class="empty-cart">
+
+            <h2>Your Cart is Empty 🛒</h2>
+
+            <p>Add some products before checkout.</p>
+
+            <a href="index.html">
+
+                <button class="checkout-btn">
+
+                    Continue Shopping
+
+                </button>
+
+            </a>
+
+        </div>
+
+        `;
+
+        document.querySelector(".summary").style.display = "none";
+
+        throw new Error("Cart is Empty");
+
+    }
 
         let total = 0;
         
@@ -96,45 +420,114 @@
         Object.values(groupedCart).forEach(product => {
             
             total += Number(product.price) * product.quantity;
+
+            const imageUrl =
+            product.images &&
+            product.images.length > 0
+            ?
+
+            product.images[0].url
+
+            :
+
+            "./Images/no-image.png";
             
             container.innerHTML += `
-            
-            <div class="cart-item">
-                
-                <h3>${product.name}</h3>
-                
-                <p class="price">
-                    ₹${product.price}
-                    
-                </p>
-                    
-                    <p>
-                        
-                        Quantity :
-                        
-                        <button onclick="decreaseQty('${product.id}')">-</button>
-                        
-                        <strong>
-                            ${product.quantity}
-                            
-                        </strong>
-                            
-                        <button onclick="increaseQty('${product.id}')">+</button>
-                            
-                    </p>
-                            
-                    <button
-                        onclick="removeProduct('${product.id}')"
-                    >
-                        Remove All
-                    </button>
-                </div>
-            `;
+
+<div class="cart-item">
+
+<div class="product-image">
+
+<img
+src="${imageUrl}"
+alt="${product.name}"
+>
+
+</div>
+
+<div class="product-details">
+
+<div class="brand">
+
+${product.brand || "Stationery"}
+
+</div>
+
+<h3>
+
+${product.name}
+
+</h3>
+
+<div class="price">
+
+₹${product.price}
+
+</div>
+
+<div>
+
+Subtotal :
+
+<b>
+
+₹${Number(product.price)*product.quantity}
+
+</b>
+
+</div>
+
+<div class="qty-box">
+
+<button onclick="decreaseQty('${product.id}')">
+
+−
+
+</button>
+
+<b>
+
+${product.quantity}
+
+</b>
+
+<button onclick="increaseQty('${product.id}')">
+
++
+
+</button>
+
+</div>
+
+<button
+
+class="remove-btn"
+
+onclick="removeProduct('${product.id}')"
+
+>
+
+🗑 Remove Item
+
+</button>
+
+</div>
+
+</div>
+
+`;
         });
-        document
-        .getElementById("total")
-        .innerText =
-        "Total : ₹" + total;
+        document.getElementById(
+"subtotal"
+).innerText =
+
+"₹"+total;
+
+document.getElementById(
+"total"
+).innerText =
+
+"₹"+total;
 
 function increaseQty(id){
 

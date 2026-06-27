@@ -31,7 +31,12 @@ async function loadProducts() {
 
     container.innerHTML = "";
 
-    data.forEach(product => {
+    const homepageProducts =
+    window.location.pathname.includes("products.html")
+        ? data
+        : data.filter(product => product.is_featured).slice(0, 8);
+
+    homepageProducts.forEach(product => {
 
         const currentPrice =
             product.discount_price || product.price;
@@ -40,24 +45,32 @@ async function loadProducts() {
                 product.images &&
                 product.images.length > 0
                     ? product.images[0].url
-                    : "https://via.placeholder.com/300x300";
+                    : "./Images/no-image.png";
 
         container.innerHTML += `
         <div class="col-6 col-md-4 col-lg-3">
             <article class="product-card">
 
                 <div class="product-img-wrap">
-                    <img
-                        src="${imageUrl}"
-                        alt="${product.name}"
-                        style="
-                            width:100%;
-                            height:100%;
-                            display:block;
-                            object-fit:contain;
-                            padding:10px;
-                        "
-                    >
+
+                <a
+                    href="product.html?id=${product.id}"
+                >
+
+                <img
+                    src="${imageUrl}"
+                    alt="${product.name}"
+                    style="
+                        width:100%;
+                        height:100%;
+                        display:block;
+                        object-fit:contain;
+                        padding:10px;
+                    "
+                >
+
+                </a>
+
                 </div>
 
                 <div class="product-body">
@@ -67,12 +80,16 @@ async function loadProducts() {
                     </div>
 
                     <h3 class="product-name">
+
                         <a
-                            href="product.html?id=${product.id}"
-                            style="text-decoration:none;color:inherit;"
+                           href="product.html?id=${product.id}"
+                           style="text-decoration:none;color:inherit;"
                         >
-                            ${product.name}
+
+                        ${product.name}
+
                         </a>
+
                     </h3>
 
                     <div class="product-price">
@@ -96,13 +113,11 @@ async function loadProducts() {
                     <div class="product-actions">
                     
                         <span
-
                             class="cart-controls"
-                            data-id="${product.id}"
-                            data-name="${product.name}"
-                            data-price="${currentPrice}"
-                            data-sku="${product.sku}"
-                    
+                            data-product='${JSON.stringify({
+                            ...product,
+                            price: currentPrice
+                            })}'
                         ></span>
                     
                         <button class="btn-buy-now">
@@ -252,6 +267,47 @@ window.addEventListener("load", () => {
 
 });
 
+const searchBox = document.getElementById("searchBox");
+
+if (searchBox) {
+
+    searchBox.addEventListener("input", function () {
+
+        const searchText = this.value.toLowerCase();
+
+        const cards = document.querySelectorAll(".product-card");
+
+        cards.forEach(card => {
+
+            const productName =
+                card.querySelector(".product-name")
+                    .innerText
+                    .toLowerCase();
+
+            const brandName =
+                card.querySelector(".product-brand")
+                    .innerText
+                    .toLowerCase();
+
+            if (
+                productName.includes(searchText) ||
+                brandName.includes(searchText)
+            ) {
+
+                card.parentElement.style.display = "block";
+
+            } else {
+
+                card.parentElement.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+}
+
 const savedUser =
 localStorage.getItem("userEmail");
 
@@ -364,10 +420,23 @@ function changeQty(product, delta){
 
 function renderCartControls(id){
 
-    const el =
-    document.querySelector(
-        `.cart-controls[data-id="${id}"]`
-    );
+    const controls =
+    document.querySelectorAll(".cart-controls");
+
+let el = null;
+
+controls.forEach(c=>{
+
+    const product =
+    JSON.parse(c.dataset.product);
+
+    if(product.id===id){
+
+        el=c;
+
+    }
+
+});
 
     if(!el) return;
 
@@ -414,36 +483,15 @@ document.addEventListener("click", (e) => {
 
     if(e.target.classList.contains("btn-add-cart")){
 
-        const id =
-            e.target.dataset.id;
+    const controls =
+        e.target.closest(".cart-controls");
 
-        const card =
-            e.target.closest(".product-card");
-
-        const name =
-            card.querySelector(".product-name")
-            .innerText;
-
-        const price =
-            card.querySelector(".price-current")
-            .innerText
-            .replace("₹","");
-
-        const controls =
-            card.querySelector(".cart-controls");
-        
-        const sku =
-            controls.dataset.sku;
-
-        changeQty(
-            {
-                id:id,
-                name:name,
-                price:price,
-                sku:sku
-            },
-            1
+    const product =
+        JSON.parse(
+            controls.dataset.product
         );
+
+    changeQty(product,1);
 
     }
 
@@ -488,7 +536,8 @@ document.addEventListener("click", (e) => {
 });
 
 const searchInput =
-document.getElementById("searchInput");
+document.getElementById("searchInput") ||
+document.getElementById("searchBox");
 
 if(searchInput){
 

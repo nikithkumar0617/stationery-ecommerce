@@ -5,39 +5,151 @@
 
     <style>
 
-        body{
-            font-family:Arial;
-            padding:40px;
-            background:#f5f5f5;
-        }
+body{
 
-        input,
-        textarea{
+margin:0;
 
-            width:100%;
-            padding:12px;
-            margin-bottom:15px;
+font-family:Arial,sans-serif;
 
-        }
+background:#f5f7fb;
 
-        button{
+padding:40px;
 
-            padding:12px 20px;
-            border:none;
-            background:#ff5722;
-            color:white;
-            cursor:pointer;
+}
 
-        }
+.box{
 
-        .box{
+max-width:1300px;
 
-            background:white;
-            padding:25px;
-            border-radius:10px;
-            max-width:700px;
+margin:auto;
 
-        }
+}
+
+.checkout-container{
+
+display:grid;
+
+grid-template-columns:2fr 1fr;
+
+gap:35px;
+
+}
+
+.shipping-box,
+.summary-box{
+
+background:white;
+
+padding:30px;
+
+border-radius:18px;
+
+box-shadow:0 15px 35px rgba(0,0,0,.08);
+
+}
+
+h1{
+
+font-size:42px;
+
+margin-bottom:30px;
+
+color:#111633;
+
+}
+
+h2{
+
+margin-bottom:20px;
+
+color:#111633;
+
+}
+
+input,
+textarea{
+
+width:100%;
+
+padding:15px;
+
+margin-bottom:18px;
+
+border:2px solid #e7eaf4;
+
+border-radius:10px;
+
+box-sizing:border-box;
+
+font-size:15px;
+
+}
+
+textarea{
+
+height:120px;
+
+resize:none;
+
+}
+
+button{
+
+width:100%;
+
+padding:16px;
+
+background:#ff5a2c;
+
+color:white;
+
+border:none;
+
+border-radius:12px;
+
+font-size:17px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+button:hover{
+
+background:#e74a20;
+
+}
+
+.order-item{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:12px 0;
+
+border-bottom:1px solid #eee;
+
+}
+
+.order-item:last-child{
+
+border:none;
+
+}
+
+#orderTotal{
+
+font-size:28px;
+
+margin-top:20px;
+
+color:#ff5a2c;
+
+}
 
     </style>
 
@@ -47,32 +159,48 @@
 
 <body>
 
-<div class="box">
+<h1>Checkout</h1>
 
-    <h1>Checkout</h1>
+<div class="checkout-container">
 
-    <input
-        id="customerName"
-        placeholder="Full Name"
-    >
+    <div class="shipping-box">
 
-    <input
-        id="customerPhone"
-        placeholder="Phone Number"
-    >
+        <h2>Shipping Details</h2>
 
-    <textarea
+        <input id="customerName" placeholder="Full Name">
+
+        <input id="customerPhone" placeholder="Phone Number">
+
+        <textarea
         id="customerAddress"
-        placeholder="Delivery Address"
-    ></textarea>
+        placeholder="Delivery Address">
+        </textarea>
 
-    <h3 id="orderTotal"></h3>
+        <input id="customerCity" placeholder="City">
 
-    <button
-        onclick="placeOrder()"
-    >
-        Place Order
-    </button>
+        <input id="customerState" placeholder="State">
+
+        <input id="customerPincode" placeholder="Pincode">
+
+    </div>
+
+    <div class="summary-box">
+
+        <h2>Order Summary</h2>
+
+        <div id="orderItems"></div>
+
+        <hr>
+
+        <h3 id="orderTotal"></h3>
+
+        <button onclick="placeOrder()">
+
+            Place Order
+
+        </button>
+
+    </div>
 
 </div>
 
@@ -99,17 +227,51 @@ JSON.parse(
 
 let total = 0;
 
-cart.forEach(item => {
+const orderItemsDiv =
+document.getElementById("orderItems");
 
-    total +=
-        Number(item.price);
+orderItemsDiv.innerHTML = "";
+
+cart.forEach(item=>{
+
+const lineTotal =
+Number(item.price) *
+Number(item.quantity);
+
+total += lineTotal;
+
+orderItemsDiv.innerHTML += `
+
+<div class="order-item">
+
+<div>
+
+<b>${item.name}</b>
+
+<br>
+
+Qty : ${item.quantity}
+
+</div>
+
+
+<div>
+
+₹${lineTotal}
+
+</div>
+
+</div>
+
+`;
 
 });
 
-document
-.getElementById("orderTotal")
-.innerText =
-"Order Total : ₹" + total;
+document.getElementById(
+"orderTotal"
+).innerHTML =
+
+`Total : ₹${total}`;
 
 async function placeOrder(){
 
@@ -137,8 +299,54 @@ async function placeOrder(){
         "customerAddress"
     ).value;
 
+    const customerCity =
+    document.getElementById(
+    "customerCity"
+    ).value;
+
+    const customerState =
+    document.getElementById(
+    "customerState"
+    ).value;
+
+    const customerPincode =
+    document.getElementById(
+    "customerPincode"
+    ).value;
+
+    if(
+
+    !customerName ||
+
+    !customerPhone ||
+
+    !customerAddress ||
+
+    !customerCity ||
+
+    !customerState ||
+
+    !customerPincode
+
+    ){
+
+    alert(
+
+    "Please fill all shipping details."
+
+    );
+
+    return;
+
+    }
+
     const orderNumber =
     "ORD-" + Date.now();
+
+    localStorage.setItem(
+    "lastOrderNumber",
+    orderNumber
+    );
 
     const {
         data: orderData,
@@ -162,9 +370,12 @@ async function placeOrder(){
             shipping_phone: customerPhone,
             shipping_address: customerAddress,
 
-            shipping_city: "Warangal",
-            shipping_state: "Telangana",
-            shipping_pincode: "506002",
+            shipping_city: customerCity,
+
+            shipping_state: customerState,
+
+            shipping_pincode: customerPincode,
+            
             shipping_country: "India"
         }
     ])
@@ -205,8 +416,17 @@ async function placeOrder(){
             }
         ]);
 
-        console.log(data);
-        console.log(error);
+        if(error){
+
+        console.error(error);
+
+        alert(
+        "Failed to save order items."
+        );
+
+        return;
+
+}
 
         const {
     data: productData,
@@ -221,26 +441,63 @@ await supabaseClient
 
 if(!stockError && productData){
 
-    const newStock =
-    productData.stock_qty -
-    (item.quantity || 1);
+    if(productData.stock_qty < item.quantity){
 
-    await supabaseClient
-    .from("products")
-    .update({
-        stock_qty: newStock
-    })
-    .eq("id", item.id);
+alert(
+
+item.name +
+
+" is out of stock."
+
+);
+
+return;
+
+}
+
+const newStock =
+productData.stock_qty -
+item.quantity;
+
+    const {
+
+error:updateError
+
+}
+
+=
+
+await supabaseClient
+
+.from("products")
+
+.update({
+
+stock_qty:newStock
+
+})
+
+.eq("id",item.id);
+
+if(updateError){
+
+console.error(updateError);
+
+alert(
+
+"Failed to update product stock."
+
+);
+
+return;
+
+}
 
 }
     }
 
     localStorage.removeItem(
         "cart"
-    );
-
-    alert(
-        "Order Saved To Database"
     );
 
     window.location.href =
