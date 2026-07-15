@@ -14,129 +14,64 @@ supabase.createClient(
 
 async function loadProducts() {
 
+    console.log("STEP 1");
+
     const { data, error } =
     await supabaseClient
         .from("products")
         .select("*");
 
-    allProducts = data;
+    console.log("STEP 2");
 
-    if (error) {
+    if(error){
         console.error(error);
         return;
     }
 
-    const container =
-        document.getElementById("products-container");
+    console.log("Products Found:", data.length);
 
-    container.innerHTML = "";
+    allProducts = data;
 
-    const homepageProducts =
-    window.location.pathname.includes("products.html")
-        ? data
-        : data.filter(product => product.is_featured).slice(0, 8);
+    if(window.location.pathname.includes("products.html")){
 
-    homepageProducts.forEach(product => {
+        console.log("Products Page");
 
-        const currentPrice =
-            product.discount_price || product.price;
+        renderProductsGrid(
+            data,
+            "products-container"
+        );
 
-            const imageUrl =
-                product.images &&
-                product.images.length > 0
-                    ? product.images[0].url
-                    : "./Images/no-image.png";
+    }else{
 
-        container.innerHTML += `
-        <div class="col-6 col-md-4 col-lg-3">
-            <article class="product-card">
+        console.log("Homepage");
 
-                <div class="product-img-wrap">
+        renderProductsGrid(
+            data.filter(p=>p.is_featured).slice(0,8),
+            "featured-products-container"
+        );
 
-                <a
-                    href="product.html?id=${product.id}"
-                >
+        renderProductsGrid(
+            [...data]
+            .sort((a,b)=>
+                new Date(b.created_at)-new Date(a.created_at)
+            )
+            .slice(0,8),
+            "latest-products-container"
+        );
 
-                <img
-                    src="${imageUrl}"
-                    alt="${product.name}"
-                    style="
-                        width:100%;
-                        height:100%;
-                        display:block;
-                        object-fit:contain;
-                        padding:10px;
-                    "
-                >
+        renderProductsGrid(
+            [...data]
+            .sort((a,b)=>
+                (b.average_rating||0)-(a.average_rating||0)
+            )
+            .slice(0,8),
+            "best-sellers-container"
+        );
 
-                </a>
+    }
 
-                </div>
-
-                <div class="product-body">
-
-                    <div class="product-brand">
-                        ${product.brand}
-                    </div>
-
-                    <h3 class="product-name">
-
-                        <a
-                           href="product.html?id=${product.id}"
-                           style="text-decoration:none;color:inherit;"
-                        >
-
-                        ${product.name}
-
-                        </a>
-
-                    </h3>
-
-                    <div class="product-price">
-
-                        <span class="price-current">
-                            ₹${currentPrice}
-                        </span>
-
-                        ${
-                            product.discount_price
-                            ? `
-                            <span class="price-original">
-                                ₹${product.price}
-                            </span>
-                            `
-                            : ""
-                        }
-
-                    </div>
-
-                    <div class="product-actions">
-                    
-                        <span
-                            class="cart-controls"
-                            data-product='${JSON.stringify({
-                            ...product,
-                            price: currentPrice
-                            })}'
-                        ></span>
-                    
-                        <button class="btn-buy-now">
-                    
-                            Buy Now
-                    
-                        </button>
-                    
-                    </div>
-
-                </div>
-
-            </article>
-        </div>
-        `;
-
-        renderCartControls(product.id);
-    });
 }
+
 
 loadProducts();
 
@@ -601,5 +536,121 @@ if(searchInput){
 
         }
     );
+
+}
+
+function renderProductsGrid(products,containerId){
+
+    const container =
+    document.getElementById(containerId);
+
+    if(!container) return;
+
+    container.innerHTML="";
+
+    products.forEach(product=>{
+
+        const currentPrice =
+        product.discount_price || product.price;
+
+        const imageUrl =
+        product.images &&
+        product.images.length>0
+        ? product.images[0].url
+        : "./Images/no-image.png";
+
+        container.innerHTML += `
+
+<div class="col-6 col-md-4 col-lg-3">
+
+<article class="product-card">
+
+<div class="product-img-wrap">
+
+<a href="product.html?id=${product.id}">
+
+<img
+src="${imageUrl}"
+alt="${product.name}"
+style="
+width:100%;
+height:100%;
+display:block;
+object-fit:contain;
+padding:10px;
+">
+
+</a>
+
+</div>
+
+<div class="product-body">
+
+<div class="product-brand">
+
+${product.brand}
+
+</div>
+
+<h3 class="product-name">
+
+<a
+href="product.html?id=${product.id}"
+style="text-decoration:none;color:inherit;"
+>
+
+${product.name}
+
+</a>
+
+</h3>
+
+<div class="product-price">
+
+<span class="price-current">
+
+₹${currentPrice}
+
+</span>
+
+${
+product.discount_price
+?
+`<span class="price-original">₹${product.price}</span>`
+:
+""
+}
+
+</div>
+
+<div class="product-actions">
+
+<span
+class="cart-controls"
+data-product='${JSON.stringify({
+...product,
+price:currentPrice
+})}'
+></span>
+
+<button class="btn-buy-now">
+
+Buy Now
+
+</button>
+
+</div>
+
+</div>
+
+</article>
+
+</div>
+
+`;
+
+        renderCartControls(product.id);
+
+    });
 
 }

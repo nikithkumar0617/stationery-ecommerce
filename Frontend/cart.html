@@ -404,17 +404,7 @@ Proceed To Checkout
         
         cart.forEach(product => {
             
-            if(groupedCart[product.id]){
-                
-                groupedCart[product.id].quantity++;
-            
-            }else{
-                
-                groupedCart[product.id] = {
-                    ...product,
-                    quantity: 1
-                };
-            }
+            groupedCart[product.id] = product;
         });
         
         Object.values(groupedCart).forEach(product => {
@@ -425,11 +415,8 @@ Proceed To Checkout
             product.images &&
             product.images.length > 0
             ?
-
             product.images[0].url
-
             :
-
             "./Images/no-image.png";
             
             container.innerHTML += `
@@ -521,21 +508,23 @@ onclick="removeProduct('${product.id}')"
 "subtotal"
 ).innerText =
 
-"₹"+total;
+"₹"+total.toFixed(2);
 
 document.getElementById(
 "total"
 ).innerText =
 
-"₹"+total;
+"₹"+total.toFixed(2);
 
 function increaseQty(id){
 
     const item =
-    cart.find(product => product.id === id);
+    cart.find(item => item.id === id);
 
     if(item){
-        cart.push({...item});
+
+        item.quantity++;
+
     }
 
     localStorage.setItem(
@@ -544,17 +533,24 @@ function increaseQty(id){
     );
 
     location.reload();
+
 }
 
 function decreaseQty(id){
 
-    const index =
-    cart.findIndex(
-        product => product.id === id
-    );
+    const item =
+    cart.find(item => item.id === id);
 
-    if(index !== -1){
-        cart.splice(index,1);
+    if(!item) return;
+
+    item.quantity--;
+
+    if(item.quantity <= 0){
+
+        cart = cart.filter(
+            p => p.id !== id
+        );
+
     }
 
     localStorage.setItem(
@@ -563,14 +559,12 @@ function decreaseQty(id){
     );
 
     location.reload();
+
 }
 
 function removeProduct(id){
 
-    cart =
-    cart.filter(
-        product => product.id !== id
-    );
+    cart = cart.filter(item => item.id !== id);
 
     localStorage.setItem(
         "cart",
@@ -578,6 +572,7 @@ function removeProduct(id){
     );
 
     location.reload();
+
 }
 
     </script>

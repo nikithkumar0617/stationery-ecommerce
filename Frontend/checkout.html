@@ -275,6 +275,14 @@ document.getElementById(
 
 async function placeOrder(){
 
+    if(cart.length === 0){
+
+        alert("Your cart is empty.");
+
+        return;
+
+    }
+
     const userId =
     localStorage.getItem("userId");
 
@@ -391,6 +399,13 @@ async function placeOrder(){
 
     for(const item of cart){
 
+        console.log("========== CART ITEM ==========");
+        console.log(item);
+
+        console.log("Product ID:", item.id);
+        console.log("Quantity:", item.quantity);
+        console.log("Unit Price:", item.price);
+
         const { data, error } =
         await supabaseClient
         .from("order_items")
@@ -439,6 +454,9 @@ await supabaseClient
 .eq("id", item.id)
 .single();
 
+console.log("Product Data:", productData);
+console.log("Stock Error:", stockError);
+
 if(!stockError && productData){
 
     if(productData.stock_qty < item.quantity){
@@ -478,6 +496,9 @@ stock_qty:newStock
 })
 
 .eq("id",item.id);
+
+console.log("New Stock:", newStock);
+console.log("Update Error:", updateError);
 
 if(updateError){
 

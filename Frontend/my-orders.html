@@ -285,6 +285,16 @@ async function loadOrders(){
     const userId =
     localStorage.getItem("userId");
 
+        if(!userId){
+
+        alert("Please Login First");
+
+        window.location.href = "index.html";
+
+        return;
+
+    }
+
     const {
         data: orders,
         error
@@ -296,6 +306,17 @@ async function loadOrders(){
     .order("placed_at", {
         ascending:false
     });
+
+    if(error){
+
+        console.error(error);
+
+        container.innerHTML =
+        "<h3>Failed To Load Orders.</h3>";
+
+        return;
+
+    }
 
     const container =
     document.getElementById(
@@ -323,7 +344,7 @@ async function loadOrders(){
         
         let productsHtml = "";
         
-        items.forEach(item=>{
+        (items || []).forEach(item=>{
             
 productsHtml += `
 
@@ -397,7 +418,15 @@ margin-top:8px;
 "
 >
 
-${new Date(order.placed_at).toLocaleString()}
+${new Date(order.placed_at).toLocaleDateString("en-IN",{
+
+day:"numeric",
+
+month:"long",
+
+year:"numeric"
+
+})}
 
 </div>
 
@@ -534,7 +563,7 @@ Total Amount
 
 <div class="total">
 
-₹${order.total_amount}
+₹${Number(order.total_amount).toFixed(2)}
 
 </div>
 
